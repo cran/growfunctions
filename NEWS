@@ -1,0 +1,45 @@
+Version 0.1
+-------------------------------------------------------------------------
+
+FEATURES
+
+* new release on CRAN.
+
+* performs Bayesian non-parametric modeling on a (rectangular) set of functional data observations.
+
+* The collection of functions may be modeled under Gaussian process (GP) or intrinsic Gaussian Markov
+
+* random field (iGMRF) prior formulations.
+
+* The covariance and precision parameters of the GP and iGMRF formulations, respectively, are placed under
+
+* a Dirichlet process (DP) prior to allow the data to discover dependence among the estimated functions
+
+* where co-clusters functions are drawn from distributions sharing the same covariance and precision parameters.
+
+* the GP prior formulation is invoked with gpdpgrow()
+
+* any number of additive covariance terms may be specified with gpdpgrow().
+
+* for example, if there are 4 terms, then the input variable, gp_cov = c("rq","se","sn","sn")
+
+* if the covariance functions for the 4 terms are structured as (rational quadratic, squared exponential,
+
+* seasonal, seasonal), respectively.  The input variable, sn_order = c(3,12), sets the order for each seasonality
+
+* term; in this case, 3 months and 12 months (assuming the data time scale is denoted by month).
+
+* the iGMRF prior is invoked with gmrfdpgrow(), also allowing any number of additive precision terms
+
+* the input variable, q_type = c("tr","sn","sn"), denotes "tr' = trend, and "sn" = seasonality terms.
+
+* input, q_order = c(2,3,12) denotes the order for the associated term; for example, the second term
+
+* is specified as seasonal of order = 3 (e.g. months).
+
+
+CHANGES
+
+08/10/2014
+-----------
+* version 0.1 launched on CRAN.
