@@ -157,8 +157,9 @@ SEXP lsqcluster(arma::umat& S, arma::ucolvec& ordscore, arma::mat& phat,
 SEXP pop_Num(const arma::ucolvec& s, const arma::vec& ipr, arma::colvec& Num);
 /* dpmix_moves */
 SEXP clusterstep(const arma::cube& B, arma::mat& kappa_star, arma::mat& B1, 
-            const arma::uvec& o, const arma::field<arma::sp_mat>& c, const arma::mat& D, 
-            arma::ucolvec& s, 
+            const arma::uvec& o, const arma::field<arma::mat>& c, 
+            //const arma::field<arma::sp_mat>& c,
+            const arma::mat& D, arma::ucolvec& s, 
             arma::ucolvec& num, unsigned int& M, double& conc, int a, int b, const arma::vec& ipr,
             arma::colvec& Num);
 SEXP clusterstep_alt(const arma::cube& B, arma::mat& kappa_star, arma::mat& B1, const arma::uvec& o,
@@ -171,11 +172,13 @@ SEXP move_kappastar_alt(arma::mat& kappa_star, const arma::cube& B, const arma::
                     const arma::ucolvec& s, 
                     arma::uvec& o, int T, int a, int b, const arma::vec& ipr);
 SEXP move_B(const arma::mat& y, arma::cube& B, const arma::mat& kappa_star, 
-               const arma::field<arma::sp_mat>& C, 
+               //const arma::field<arma::sp_mat>& C, 
+               const arma::field<arma::mat>& C,
                arma::mat& gamma, const arma::mat& D, 
                const arma::ucolvec& s, double tau_e);
 SEXP move_B_alt(const arma::mat& y, arma::cube& B, const arma::mat& kappa_star, 
-               const arma::field<arma::sp_mat>& C, 
+               //const arma::field<arma::sp_mat>& C, 
+               const arma::field<arma::mat>& C,
                arma::mat& gamma, const arma::mat& D, 
                const arma::ucolvec& s, double tau_e);
 SEXP move_taue(const arma::mat& y, const arma::mat& gamma, double& tau_e, double a, double b,

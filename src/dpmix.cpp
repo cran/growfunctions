@@ -50,7 +50,8 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,
     mat y(Yr.begin(), N, T, false);
     // arma objects
     mat D(Dr.begin(),K,T,false); /* dense matrix where each row holds the T diagonal for Q_k */
-    field<sp_mat> C(K,1); /* list of normalized adjacency matrices */
+    // field<sp_mat> C(K,1); /* list of normalized adjacency matrices */
+    field<mat> C(K,1); /* list of normalized adjacency matrices */
     cube Q(T,T,K); /* iGMRF precision matrices for K terms, computed from C */
     /* uvec, o, to capture order for each of the K T x T precision matrices, Q_k */
     // uvec o(o_r.begin(),K,false); /* term of length K identifies order of cov formulations */
@@ -60,7 +61,8 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,
     mat D_k(T,T); /* diagonal matrix with values the diagonals of Q.slice(k) */
     for(k = 0; k < K; k++)
     {
-          C(k,0)          = as<sp_mat>(Cr[k]); 
+          //C(k,0)          = as<sp_mat>(Cr[k]); 
+          C(k,0)          = as<mat>(Cr[k]);
           D_k             = eye(T,T);
           D_k.diag()      = D.row(k);
           Q.slice(k)      = D_k * (eye(T,T) - C(k,0));
@@ -74,7 +76,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,
  
     // Set random number generator state
     RNGScope scope; /* Rcpp */
-    srand ( time(NULL) ); /* arma */
+    arma_rng::set_seed_random(); /* arma */
 
     // Initialize SAMPLED parameter values   
     /* cluster capture variables */

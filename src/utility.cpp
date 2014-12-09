@@ -158,7 +158,7 @@ SEXP rmvncov(const mat& phi_inv, const colvec& h, colvec& b)
      // build posterior variance and mean
      int p      	= phi_inv.n_cols;
 	colvec noise 	= randn<colvec>(p);
-	b 		     = trimatu(chol(symmatl(phi_inv)).t()) * noise + h;
+	b 		     = trimatu(chol(symmatl(phi_inv))).t() * noise + h;
      END_RCPP
 } /* end function rmvnbasic for drawing a single mvn sample */
 
@@ -169,7 +169,7 @@ SEXP rmvnchol(const mat& U, const colvec& h, colvec& b)
      // build posterior variance and mean
      int p          = U.n_cols;
 	colvec noise 	= randn<colvec>(p);
-	b 		     = trimatu(U.t()) * noise + h;
+	b 		     = trimatu(U).t() * noise + h;
      END_RCPP
 } /* end function rmvnbasic for drawing a single mvn sample */
 

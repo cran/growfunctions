@@ -206,7 +206,7 @@ gmrfdpgrow.default		<- function(y, ipr = NULL, q_order = 2, q_type = "tr", q_sha
           
           ## convert to dcgmatrices (under Matrix package) required for sparse representation
           ## as sp_mats in RcppArmadillo
-          C[[k]]               <- as(C[[k]], "dgCMatrix") 
+          ## C[[k]]               <- as(C[[k]], "dgCMatrix") 
      } ## end loop over constructing K iGMRF precision matrices
      
      #########################################################################

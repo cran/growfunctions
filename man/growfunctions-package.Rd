@@ -10,8 +10,8 @@ from an observed collection of domain-indexed time-series.}
 \tabular{ll}{
 Package: \tab growfunctions\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2014-08-01\cr
+Version: \tab 0.11\cr
+Date: \tab 2014-12-09\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }
@@ -216,7 +216,7 @@ T. D. Savitsky (2014) Bayesian Non-parametric Functional Mixture
     Estimation for Time-indexed data. submitted to: Annals of Applied Statistics.
 
 T. D. Savitsky, D. Toth and M. Sverchkov (2014) Bayesian Estimation Under Informative Sampling,
-    Submitted to: Journal of the American Statistical Association.
+    Submitted to: Journal of the Royal Statistical Society - Series B.
 
 T. D. Savitsky (2014) Bayesian Non-Parametric Mixture Estimation for Time-Indexed Functional
     Data for \code{R}. Submitted to: Journal of Statistical Software.

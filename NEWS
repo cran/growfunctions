@@ -1,4 +1,4 @@
-Version 0.1
+Version 0.11
 -------------------------------------------------------------------------
 
 FEATURES
@@ -43,3 +43,9 @@ CHANGES
 08/10/2014
 -----------
 * version 0.1 launched on CRAN.
+
+12/09/2014
+----------
+* replaced srand() with arma_rng::set_seed_random() to initialize random seed for RcppArmadillo.
+* removed use of arma::sp_mat (sparse matrix) formulation for normalized CAR adjacency matrix from
+  gmrfdpgrow() due to memory initialization issue in RcppArmadillo.

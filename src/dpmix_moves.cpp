@@ -5,9 +5,10 @@ using namespace std;
 
 // update vector of cluster membership indicators, s(i),....,s(N)
 SEXP clusterstep(const cube& B, mat& kappa_star, mat& B1, const uvec& o,
-            const field<sp_mat>& C, const mat& D, ucolvec& s, 
-            ucolvec& num, unsigned int& M, double& conc, int a, int b,
-            const vec& ipr, colvec& Num)
+             const field<mat>& C, const mat& D, ucolvec& s, 
+             //const field<sp_mat>& C,
+             ucolvec& num, unsigned int& M, double& conc, int a, int b,
+             const vec& ipr, colvec& Num)
     {
         BEGIN_RCPP
       
@@ -105,6 +106,7 @@ SEXP clusterstep(const cube& B, mat& kappa_star, mat& B1, const uvec& o,
             double lweights_l;
             for(l = 0; l < M; l++) /* cycle through all clusters for s(i) */
             {
+                s(i)          = l; /* will compute likelihoods for every cluster */  
                 lweights_l = 0; /* hold log densities for K computations */
                 for(k = 0; k < K; k++)
                 {
@@ -172,10 +174,6 @@ SEXP clusterstep(const cube& B, mat& kappa_star, mat& B1, const uvec& o,
     } /* end function bstep for cluster assignments, s, and computing zb */
 
 
-#include "growfunctions.h"
-using namespace Rcpp;
-using namespace arma;
-using namespace std;
 
 // update vector of cluster membership indicators, s(i),....,s(N)
 SEXP clusterstep_alt(const cube& B, mat& kappa_star, mat& B1, const uvec& o,
@@ -392,7 +390,8 @@ SEXP move_kappastar_alt(mat& kappa_star, const cube& B, const cube& Q,
      END_RCPP
 } /* end function move_kappastar() to sample cluster locations */
 
-SEXP move_B(const mat& y, cube& B, const mat& kappa_star, const field<sp_mat>& C, 
+SEXP move_B(const mat& y, cube& B, const mat& kappa_star, const field<mat>& C,
+            //const field<sp_mat>& C,
             mat& gamma, const mat& D, const ucolvec& s, double tau_e)
 {
      BEGIN_RCPP
@@ -452,7 +451,8 @@ SEXP move_B(const mat& y, cube& B, const mat& kappa_star, const field<sp_mat>& C
 } /* end function ustep to sample B_1,...,B_K */
 
 
-SEXP move_B_alt(const mat& y, cube& B, const mat& kappa_star, const field<sp_mat>& C, 
+SEXP move_B_alt(const mat& y, cube& B, const mat& kappa_star, const field<mat>& C, 
+            //const field<sp_mat>& C,
             mat& gamma, const mat& D, const ucolvec& s, double tau_e)
 {
      BEGIN_RCPP
