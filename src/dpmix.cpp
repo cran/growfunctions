@@ -76,7 +76,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,
  
     // Set random number generator state
     RNGScope scope; /* Rcpp */
-    arma_rng::set_seed_random(); /* arma */
+    //arma_rng::set_seed_random(); /* arma */
 
     // Initialize SAMPLED parameter values   
     /* cluster capture variables */
@@ -95,7 +95,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,
     for(m = 0; m < M; m++)
     {
           pos	               = find(s == m);
-	     num(m)              = pos.n_elem;
+	        num(m)              = pos.n_elem;
           //num_ht(m)           = sum(1/ipr(pos));
           num_ht(m)           = sum(1/ipr_dummy(pos));
     }   

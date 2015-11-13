@@ -124,7 +124,7 @@ SEXP GPDPMIXMIS(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o_jitter
  
     // Set random number generator state
     RNGScope scope; /* Rcpp */
-    arma_rng::set_seed_random(); /* arma */
+    //arma_rng::set_seed_random(); /* arma */
 
     // Initialize SAMPLED parameter values   
     /* cluster capture variables */
@@ -143,8 +143,8 @@ SEXP GPDPMIXMIS(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o_jitter
     uvec pos;
     for(m = 0; m < M; m++)
     {
-          pos	               = find(s == m);
-	     num(m)              = pos.n_elem;
+          pos	                = find(s == m);
+	        num(m)              = pos.n_elem;
           //num_ht(m)           = sum(1/ipr(pos));
           num_ht(m)           = sum(1/ipr_dummy(pos));
     }   

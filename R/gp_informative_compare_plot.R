@@ -63,7 +63,7 @@
 #' ## sampling "blocks" of the population and 
 #' ## the second stage sampling strata within blocks). 
 #' dat_sim        <- gen_informative_sample(N= 10000, 
-#'                                 n = 500, T = 10,
+#'                                 n = 500, T = 5,
 #'                                 noise_to_signal = 0.1)
 #'
 #' y_obs                       <- dat_sim$y_obs
@@ -74,7 +74,7 @@
 #' probabilities, ipr
 #' res_gp_w            <- gpdpgrow(y = y_obs, 
 #'                                ipr = dat_sim$map_obs$incl_prob, 
-#'                                n.iter = 10, n.burn = 4,  
+#'                                n.iter = 5, n.burn = 2,  
 #'                                n.thin = 1, n.tune = 0)
 ## plots of estimated functions, faceted by cluster 
 #' and fit vs. data for experimental units
@@ -85,7 +85,7 @@
 #'
 #' ## estimate parameters ignoring sampling design
 #' res_gp_i            <- gpdpgrow(y = y_obs, 
-#'                                n.iter = 10, n.burn = 4, 
+#'                                n.iter = 5, n.burn = 2, 
 #'                                n.thin = 1, n.tune = 0)
 #' ## plots of estimated functions, faceted by cluster and fit vs. 
 #' ## data for experimental units
@@ -101,7 +101,7 @@
 #'
 #' ## estimate parameters under an iid sampling design
 #' res_gp_iid          <- gpdpgrow(y = dat_sim$y_iid, 
-#'                                n.iter = 10, n.burn = 4,   
+#'                                n.iter = 5, n.burn = 2,   
 #'                                n.thin = 1, n.tune = 0)
 #' ## plots of estimated functions, faceted by cluster and 
 #' ## fit vs. data for experimental units

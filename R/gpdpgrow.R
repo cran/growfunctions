@@ -116,17 +116,17 @@ NULL
 #' ## Population Survey (cps)
 #' data(cps)
 #' ## subselect the columns of N x T, y, associated with 
-#' ## the years 2009 - 2013
+#' ## the years 2011 - 2013
 #' ## to examine the state level employment 
 #' ## levels during the "great recession"
-#' y_short   <- cps$y[,(cps$yr_label %in% c(2009:2013))]
+#' y_short   <- cps$y[,(cps$yr_label %in% c(2011:2013))]
 #' 
 #' ## uses default setting of a single "rational quadratic" covariance
 #' ## run for 500 iterations, with half discarded as burn-in to 
 #' ## obtain a more useful result.
 #' res_gp               <- gpdpgrow(y = y_short, 
-#'                                  n.iter = 8, 
-#'                                  n.burn = 4, 
+#'                                  n.iter = 4, 
+#'                                  n.burn = 1, 
 #'                                  n.thin = 1, 
 #'                                  n.tune = 0)  
 #'

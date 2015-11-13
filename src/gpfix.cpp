@@ -118,7 +118,7 @@ SEXP GPFIX(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o_jitter,
  
     // Set random number generator state
     RNGScope scope; /* Rcpp */
-    arma_rng::set_seed_random(); /* arma */
+    //arma_rng::set_seed_random(); /* arma */
 
     // Initialize SAMPLED parameter values   
     /* cluster capture variables */

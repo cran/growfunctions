@@ -951,8 +951,8 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
 	          {
 		          auxSize 	= w_star;
 		          num(s(i))	-= 1; /* decrement cluster count of subject "i" */
-                    /* scale up num to population totals, Num, based on H-T inverse probability estimator */
-                    Num(s(i)) -= 1/ipr(i);
+              /* scale up num to population totals, Num, based on H-T inverse probability estimator */
+              Num(s(i)) -= 1/ipr(i);
 		          startPos	= M;
 	          }else{ /* num(s(i)) == 1 so draw new clusters staring at M-1 */
 		          auxSize 	= w_star - 1;
@@ -996,7 +996,7 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
                     NumericVector _theta_vec            = rgamma( (P*auxSize), a, (1/b) );
                     vec theta_vec                       = as<vec>(_theta_vec);
                     theta_aux_h                         = reshape( theta_vec, P, auxSize );
-		          theta_star.insert_cols(M,theta_aux_h); /* theta_star now has h columns */
+		                theta_star.insert_cols(M,theta_aux_h); /* theta_star now has h columns */
                     /* set w_aux_h(p,m) to [0.1,0.9] quantiles of gamma distribution with */
                     /* shape = theta_star(p,m), rate = 1 */
                     wpm_aux(wpm_aux_h, theta_aux_h);
@@ -1010,10 +1010,10 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
                     /* memo: no observations, yet */
                     /* adding entries for aux vars and set to 0 */
                     /* by default, new rows/cols/slices set to 0 */
-		          num.insert_rows(M,auxSize,true);
+		                num.insert_rows(M,auxSize,true);
                     Num.insert_rows(M,auxSize,true); /* population uplifted */
                     /* inserts 0 for M -> h-l positions */
-	     	     weights			     = Num / (double(N)- (1/ipr(i)) +conc); 
+	     	      weights			     = Num / (double(N)- (1/ipr(i)) +conc); 
 		          weights.subvec(M,(h-1))	= ( (conc/w_star) / (double(N) - (1/ipr(i)) + conc) )*ones(auxSize);
 	          }else{ /* num(s(i)) == 1 & w_star == 1, so new location already sampled at M-1 */
 		          weights			     = Num / (double(N)- (1/ipr(i)) +conc);
@@ -1030,8 +1030,8 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
 	          }
 	          weights		     = weights / sum(weights);
 	          // conduct discrete posterior draw for s(i), where min(s(i)) = 0
-               s(i) 		     = rdrawone(weights, h);
-	          num(s(i))		     += 1;
+               s(i) 		           = rdrawone(weights, h);
+	             num(s(i))		       += 1;
                Num(s(i))           += 1/ipr(i);
 	
 	          /* remove clusters with no observations  - must be among the w_star new clusters */

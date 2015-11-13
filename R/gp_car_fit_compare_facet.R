@@ -1,21 +1,30 @@
-#' Side-by-side plot panels that compare latent function values to data for different estimation models
+#' Side-by-side plot panels that compare latent function 
+#' values to data for different estimation models
 #'
-#' Uses as input the output object from the gpdpgrow() and gmrfdpgrow() functions.
+#' Uses as input the output object from the gpdpgrow() and 
+#' gmrfdpgrow() functions.
 #'
 #' @param objects A list input where each element is a returned object
 #'             from estimation with either of \code{gpdpgrow} or 
-#'             \code{gmrfdpgrow} or an object that contains true \code{N x T} matrix of true latent
-#'             function values, \code{f} .  This latter input is only needed if want to compare 
+#'             \code{gmrfdpgrow} or an object that contains true 
+#'             \code{N x T} matrix of true latent
+#'             function values, \code{f}.  This latter input 
+#'             is only needed if want to compare 
 #'             estimated to true latent function values.
-#' @param H An \code{N x 1} with entries in \code{1,...,M} of cluster assignments for the \code{N}
+#' @param H An \code{N x 1} with entries in \code{1,...,M} of cluster 
+#'        assignments for the \code{N}
 #'        units of \code{y} under a known clustering.
-#' @param label.object A character vector of length equal to \code{objects} that contains labels
-#'        for each element of \code{objects} to be used in rendering comparison plots.
+#' @param label.object A character vector of length equal to \code{objects} 
+#'        that contains labels for each element of \code{objects} 
+#'        to be used in rendering comparison plots.
 #'        Defaults to \code{label.object = c("gp_rq","gmrf_rw2")}.
-#' @param units_name A character input that provides a label for the set of \code{N} observation units.
+#' @param units_name A character input that provides a label 
+#'        for the set of \code{N} observation units.
 #'        Defaults to \code{units_name = "Observation_Unit"}.
-#' @param units_label A vector of labels to apply to the observation units with length equal to the number of
-#'        unique units.  Defaults to sequential numeric values as input with data, \code{y}.
+#' @param units_label A vector of labels to apply to the observation units 
+#'        with length equal to the 
+#'        number of unique units.  Defaults to sequential 
+#'        numeric values as input with data, \code{y}.
 #' @param date_field A vector of \code{Date} values for labeling the x-axis tick marks.
 #'        Defaults to \code{1:T}  .
 #' @param x.axis.label Text label for x-axis. Defaults to \code{"time"}.
@@ -30,72 +39,82 @@
 #' {
 #' library(growfunctions)
 #' 
-#' ## load the monthly employment count data for a collection of 
+#' ## load the monthly employment count data 
+#' ## for a collection of 
 #' ## U.S. states from the Current 
 #' ## Population Survey (cps)
 #' data(cps)
-#' ## subselect the columns of N x T, y, associated with 
+#' ## subselect the columns of N x T, y, 
+#' ## associated with 
 #' ## the years 2009 - 2013
-#' ## to examine the state level employment levels 
+#' ## to examine the state level 
+#' ## employment levels 
 #' ## during the "great recession"
-#' y_short             <- cps$y[,(cps$yr_label %in% c(2009:2013))]
+#' y_short <- cps$y[,(cps$yr_label %in% 
+#'                  c(2010:2013))]
 #'
-#' ## run DP mixture of GP's to estimate posterior distributions 
+#' ## run DP mixture of GP's to 
+#' ## estimate posterior distributions 
 #' ## for model parameters
-#' ## uses default setting of a single "rational quadratic" 
+#' ## uses default setting of a 
+#' ## single "rational quadratic" 
 #' ## covariance formula
-#' res_gp              <- gpdpgrow(y = y_short, 
-#'                                 n.iter = 7, 
-#'                                 n.burn = 3, 
-#'                                 n.thin = 1, 
-#'                                 n.tune = 0)  
-#' ## 2 plots of estimated functions: 1. faceted by cluster and fit;
+#' res_gp         <- gpdpgrow(
+#'                      y = y_short, 
+#'                      n.iter = 3, 
+#'                      n.burn = 1, 
+#'                      n.thin = 1, 
+#'                      n.tune = 0)  
+#' ## 2 plots of estimated functions: 
+#' ## 1. faceted by cluster and fit;
 #' ## 2.  data for experimental units.
-#' ## for a group of randomly-selected functions
-#' fit_plots_gp        <- cluster_plot( object = res_gp,  
-#'                                    units_name = "state", 
-#'                                    units_label = cps$st, 
-#'                                    single_unit = FALSE, 
-#'                                    credible = TRUE )
+#' ## for a group of randomly-selected 
+#' ## functions
+#' fit_plots_gp   <- cluster_plot( 
+#'  object = res_gp,  units_name = "state", 
+#'  units_label = cps$st, single_unit = FALSE, 
+#'  credible = TRUE )
 #'                                    
-#' ## Run the DP mixture of iGMRF's to estimate posterior 
+#' ## Run the DP mixture of iGMRF's to 
+#' ## estimate posterior 
 #' ## distributions for model parameters
-#' ## Under default RW2(kappa) = order 2 trend 
+#' ## Under default 
+#' ## RW2(kappa) = order 2 trend 
 #' ## precision term
-#' res_gmrf            <- gmrfdpgrow(y = y_short, 
-#'                                      n.iter = 35, 
-#'                                      n.burn = 15, 
-#'                                      n.thin = 1) 
+#' res_gmrf     <- gmrfdpgrow(y = y_short, 
+#'                        n.iter = 13, 
+#'                        n.burn = 4, 
+#'                        n.thin = 1) 
 #'                                      
-#' ## 2 plots of estimated functions: 1. faceted by cluster and fit;
+#' ## 2 plots of estimated functions: 
+#' ## 1. faceted by cluster and fit;
 #' ## 2.  data for experimental units.
 #' ## for a group of randomly-selected functions
-#' fit_plots_gmrf      <- cluster_plot( object = res_gmrf, 
-#'                                      units_name = "state", 
-#'                                      units_label = cps$st, 
-#'                                      single_unit = FALSE, 
-#'                                      credible = TRUE )                                    
+#' fit_plots_gmrf   <- cluster_plot( object = res_gmrf, 
+#'   units_name = "state", units_label = cps$st, 
+#'   single_unit = FALSE, 
+#'   credible = TRUE )                                    
 #'                                      
 #' ## visual comparison of fit performance 
 #' ## between gpdpgrow() and gmrfdpgrow()
 #' ## or any two objects returned from any
 #' ## combination of these estimation
 #' ## functions
-#' objects                       <- vector("list",2)
-#' objects[[1]]                  <- res_gmrf
-#' objects[[2]]                  <- res_gp
-#' label.object                  <- c("gmrf_tr2","gp_rq")
-#' ## the map data.frame object from fit_plots gp 
+#' objects        <- vector("list",2)
+#' objects[[1]]   <- res_gmrf
+#' objects[[2]]   <- res_gp
+#' label.object   <- c("gmrf_tr2","gp_rq")
+#' ## the map data.frame object 
+#' ## from fit_plots gp 
 #' ## includes a field that 
 #' ## identifies cluster assignments
 #' ## for each unit (or domain)
-#' H                          <- fit_plots_gp$map$cluster
-#' fit_plot_compare_facet     <- fit_compare( objects = objects, 
-#'                                 H = H, 
-#'                                 label.object = label.object,
-#'                                 y.axis.label = "normalized y values",
-#'                                 units_name = "state",
-#'                                 units_label = cps$st)                                                                                                              
+#' H        <- fit_plots_gp$map$cluster
+#' fit_plot_compare_facet <- 
+#' fit_compare( objects = objects, 
+#'  H = H, label.object = label.object,
+#'  y.axis.label = "normalized y",
+#'  units_name = "state", units_label = cps$st)                                  
 #' }
 #' @author Terrance Savitsky \email{tds151@@gmail.com}
 #' @aliases fit_compare
@@ -131,7 +150,8 @@ fit_compare <- function(objects, H = NULL, label.object = c("gp_rq","gmrf_rw2"),
      }
      
      d3             <- data.frame(units_label,y) ## y is N x T
-     names(d3)      <- c(eval(units_name),1:T) ## even though month is date/numeric, names will be char
+     names(d3)      <- c(eval(units_name),1:T) ## even though month is date/numeric, names will be 
+                                               ## char
      dat_gca        <- melt(d3,measure.vars = as.character(1:T), variable.name = "time",
                             value.name = "fit")
      
@@ -232,7 +252,8 @@ fit_compare <- function(objects, H = NULL, label.object = c("gp_rq","gmrf_rw2"),
                               size = 1.2, alpha = 0.6)
      l.2     			= geom_point(data=plot_gca,aes_string(group = eval(units_name)),size=3,shape=1,
                              colour="black") ## Add the data
-     l.3          		= geom_line(data=plot_gca,aes_string(group = eval(units_name)),lty="dotted") ## Add the data  
+     l.3          		= geom_line(data=plot_gca,aes_string(group = eval(units_name)),lty="dotted")  
+     ## Add the data  
      if( length(y.axis.label) > 0 )
      {
           if( length(x.axis.label) > 0 )

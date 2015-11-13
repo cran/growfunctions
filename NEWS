@@ -1,4 +1,4 @@
-Version 0.11
+Version 0.12
 -------------------------------------------------------------------------
 
 FEATURES
@@ -49,3 +49,11 @@ CHANGES
 * replaced srand() with arma_rng::set_seed_random() to initialize random seed for RcppArmadillo.
 * removed use of arma::sp_mat (sparse matrix) formulation for normalized CAR adjacency matrix from
   gmrfdpgrow() due to memory initialization issue in RcppArmadillo.
+
+02/20/2015
+----------
+* removed use of arma_rng::set_seed_random() to avoid warning about setting R seed from C++. 
+
+10/16/2015
+----------
+* Minor changes in anticipation of ggplot2 1.1.0
