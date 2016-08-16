@@ -2,8 +2,8 @@ Package: growfunctions
 Type: Package
 Title: Bayesian Non-Parametric Dependent Models for Time-Indexed
         Functional Data
-Version: 0.12
-Date: 2015-11-13
+Version: 0.13
+Date: 2016-07-27
 Author: Terrance Savitsky
 Maintainer: Terrance Savitsky <tds151@gmail.com>
 Description: Estimates a collection of time-indexed functions under
@@ -24,8 +24,8 @@ Collate: 'MSPE.R' 'cps.R' 'gen_informative_sample.R' 'gpdpgrow.R'
         'gmrfdpgrow.R' 'gp_car_fit_compare_facet.R' 'gp_cluster_plot.R'
         'gp_informative_compare_plot.R' 'help.R' 'plot_cluster.R'
         'predict_plot.R'
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2015-11-13 17:20:25 UTC; savitsky_t
+Packaged: 2016-08-15 14:02:50 UTC; savitsky_t
 Repository: CRAN
-Date/Publication: 2015-11-13 23:57:17
+Date/Publication: 2016-08-16 01:53:09

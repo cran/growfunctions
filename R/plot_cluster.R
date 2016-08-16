@@ -121,7 +121,7 @@ plot_cluster     <- function(y,H,sort=FALSE,sample_rate = 0.05,
      
      
      ## dev.new()
-     value <- NULL
+     value <- time <- NULL
      
      return(list(map = map, p.basis = p.basis))
 }

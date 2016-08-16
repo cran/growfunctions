@@ -453,7 +453,8 @@ gen_informative_sample        <- function(clustering = TRUE, two_stage = FALSE, 
      
      ## define dat_sim return object
      dat_sim   <- list(bb = bb, y = y, H = H, map_tot = map_tot, map_obs = map_obs, 
-                         bb_obs = bb_obs, y_obs = y_obs, n_ind = n_ind, 
+                         bb_obs = bb_obs, y_obs = y_obs, n_ind = n_ind,
+                         pop_plot = res_y$p.basis, samp_plot = res_yobs_shape$p.basis,
                          map_iid = map_iid, bb_iid = bb_iid, y_iid = y_iid,
                          sig_e = sig_e, noise_to_signal = noise_to_signal)
      ## memo: for 2-stage, n_ind is an L length list with I elements each (ordered by variance quantile).

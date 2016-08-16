@@ -185,24 +185,25 @@ mat gen_Casym(const colvec& theta_i, const mat& Omega_t, const cube& Omega_s,
      return C_i;
 } /* end function gen_Casym() */
 
-double logy_like(int i, const mat& y,  ucolvec& s, 
-                    const cube& U_last)
+double logy_like(int i, const mat& y, const colvec& ipr, ucolvec& s, 
+                 const cube& U_last)
 {
         // Compute log(MVN) density under GP prior
         int T                 = y.n_cols;
+        colvec weights        = 1/ipr;
         
         /* gp covariance matrix generation */
         /* u = [U']^-1*y -> U'u = y -> u = solve(U',y) */
         /* y'*C^-1*y = u'u */
         mat U_i               = U_last.slice(s(i));
         /* -0.5 * logdet(C_i) */
-        double loglike_i      = -(0.5)*sum(2*log(U_i.diag())); /* for an observation, not a cluster */
+        double loglike_i      = -(0.5)*weights(i)*sum(2*log(U_i.diag())); /* for an observation, not a cluster */
         rowvec y_i(T); y_i.zeros();
         colvec u_i(T);
         y_i            = y.row(i);
         u_i            = solve(trimatu(U_i).t(),y_i.t());
         /* -0.5*sum(y_i'C_i^-1y_i) */
-        loglike_i      -= 0.5*as_scalar( u_i.t()*u_i );
+        loglike_i      -= 0.5*as_scalar( weights(i) * u_i.t()*u_i );
         
         return loglike_i;
 }
@@ -932,7 +933,7 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
           // fixing all other parameters, including B_M
           unsigned int auxSize, startPos, h, ell;
           int N     = s.n_elem;
-	     int P     = theta_star.n_rows;
+	        int P     = theta_star.n_rows;
           int T     = Omega_t.n_rows;
           int i;
           mat theta_aux_h; /* added auxSize = h - M auxiliary locations */
@@ -1026,8 +1027,9 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
 	          {
 		          s(i)           = ell; /* temporary assignment */
 		          weights(ell)	= weights(ell) * 
-                                        exp( logy_like(i, y, s, U_last) );
+                                        exp( logy_like(i, y, ipr, s, U_last) );
 	          }
+	          weights.elem( find_nonfinite(weights) ).zeros();
 	          weights		     = weights / sum(weights);
 	          // conduct discrete posterior draw for s(i), where min(s(i)) = 0
                s(i) 		           = rdrawone(weights, h);
@@ -1070,7 +1072,185 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
         } /* end loop i for cluster assignment */
         END_RCPP
 } /* end function auxclusterstep for cluster assignments, s  */
+	          
+SEXP move_s(ucolvec& s, ucolvec& num, const mat& y, const cube& U_last,
+            const colvec& p, const double& conc, const colvec& ipr)
+{
+  BEGIN_RCPP
+  int M     = num.n_elem; /* also length of p */
+  int n     = s.n_elem;
+  int i     = 0, ell = 0;
+  
+  colvec weights = 1/ipr;
+  colvec p_w(M); p_w.zeros();
+  
+  for( i = 0; i < n; i++ )
+  {
+    for( ell = 0; ell < M; ell++)
+    {
+      s(i)      = ell; /* temporary assignment */
+      p_w(ell)	= pow(p(ell),weights(i)) * 
+      exp( logy_like(i, y, ipr, s, U_last) );
+    }
+    p_w		          = p_w / sum(p_w);
+    // conduct discrete posterior draw for s(i), where min(s(i)) = 0
+    s(i) 		          = rdrawone(p_w, M);
+    num(s(i))		      += 1;
+  } /* end loop i over n sample observations */
+  
+  END_RCPP
+} /* end function move_s() to sample cluster indicators, s(1), .... , s(n) */
 
+// // update vector of cluster membership indicators, s(i),....,s(N)
+// SEXP auxclusterstep2(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t, const cube& Omega_s,
+//                    const mat& y, double tau_e, int noise, double jitter, uvec& gp_mod, uvec& n_parms, 
+//                    uvec& pos_s, ucolvec& s, ucolvec& num, unsigned int& M, const int& w_star, 
+//                    double& conc, double a, double b, const vec& ipr, colvec& Num)
+// {
+//   BEGIN_RCPP
+//   // sample cluster assignments, s(1), ..., s(N)
+//   // fixing all other parameters, including B_M
+//   unsigned int auxSize, startPos, h, ell;
+//   int N     = s.n_elem;
+//   int P     = theta_star.n_rows;
+//   int T     = Omega_t.n_rows;
+//   int i;
+//   mat theta_aux_h; /* added auxSize = h - M auxiliary locations */
+//   mat wpm_aux_h; /* added slice sampling tuning parameters for auxiliary locations */
+//   cube U_aux; /* added auxSize auxiliary covariance cholesky locations */
+//   cube U_keep; /* final set of by-cluster choleskys with observations */
+//   uvec loc_keep; /* final set of cluster location labels linked to observations */
+//   unsigned int num_keep = 0; /* number of cluster location labels linked to observations */
+//   //colvec Num; /* Horvitz-Thompson scaled up num vector with inverse probability weighting */
+//   for(i = 0; i < N; i++)
+//   {
+//     /* set starting index for w_star new cluster locations */
+//     /* remember, this is c++, so starting index is 0 for all vectors */
+//     /*, including s = (0,...,M-1) */
+//     if( num(s(i)) > 1 ) /* set start at M */
+//     {
+//       auxSize 	= w_star;
+//       num(s(i))	-= 1; /* decrement cluster count of subject "i" */
+//       /* scale up num to population totals, Num, based on H-T inverse probability estimator */
+//       Num(s(i)) -= 1/ipr(i);
+//       startPos	= M;
+//       }else{ /* num(s(i)) == 1 so draw new clusters staring at M-1 */
+//       auxSize 	= w_star - 1;
+//       /* re-assign the current location for subject i to the last location, M-1 */
+//       theta_star.insert_cols(M,1);
+//       wpm.insert_cols(M,1);
+//       /* carrying along logfm_old vector to maintain current cluster */
+//       /* count and location. Recall, logfm_old is used for Metropolis */
+//       /* steps to update rho_star */
+//       theta_star.col(M)		= theta_star.col(s(i));
+//       wpm.col(M)               = wpm.col(s(i));
+//       U_last.insert_slices(M,1);
+//       U_last.slice(M)          = U_last.slice(s(i));
+//       num.insert_rows(M,1);
+//       num(M)			     = 0; /* insert new location ahead of observations */
+//       /* scale up num to population totals, Num, based on H-T inverse probability estimator */
+//       Num.insert_rows(M,1);
+//       Num(M)			     = 0; /* insert new location ahead of observations */
+//       theta_star.shed_col(s(i));
+//       wpm.shed_col(s(i));
+//       U_last.shed_slice(s(i));
+//       num.shed_row(s(i));
+//       Num.shed_row(s(i));
+//       s( find(s > s(i)) ) 	-= 1;
+//       s(i)			            = M-1;
+//       startPos		          = M-1;
+//     }/* end setting starting index for w_star new cluster locations */
+//     /* set total number of existing and auxiliary cluster locations, h */
+//     h 		= M + auxSize;
+//     colvec weights(h); weights.zeros();
+//     
+//     /* scale up num to population totals, Num, based on H-T inverse probability estimator */
+//     //pop_Num(s, ipr, Num); /* computed after set s, num and h */
+//     
+//     /* sample w_star new location values from prior (F_0) */
+//     /* since ahead of observations */
+//     /* compute weights used to draw s(i) */
+//     if( h > M ) /* num(s(i)) > 1 | (num(s(i)) == 1 & w_star > 1) */
+//     {
+//       /* create auxSize new locations to insert to theta_star */
+//       NumericVector _theta_vec            = rgamma( (P*auxSize), a, (1/b) );
+//       vec theta_vec                       = as<vec>(_theta_vec);
+//       theta_aux_h                         = reshape( theta_vec, P, auxSize );
+//       theta_star.insert_cols(M,theta_aux_h); /* theta_star now has h columns */
+//       /* set w_aux_h(p,m) to [0.1,0.9] quantiles of gamma distribution with */
+//       /* shape = theta_star(p,m), rate = 1 */
+//       wpm_aux(wpm_aux_h, theta_aux_h);
+//       wpm.insert_cols(M, wpm_aux_h);
+//       /* compute T x T x auxSize, U_aux */
+//       U_aux.set_size(T,T,auxSize);
+//       /* memo: use theta_aux_h to compute U_aux; doesn't appear directly in like */
+//       compute_U(theta_aux_h, tau_e, jitter, gp_mod, n_parms, pos_s,
+//                Omega_t, Omega_s, noise, U_aux);       
+//       U_last.insert_slices(M,U_aux); /* U_last now has h slices */
+//       /* memo: no observations, yet */
+//       /* adding entries for aux vars and set to 0 */
+//       /* by default, new rows/cols/slices set to 0 */
+//       num.insert_rows(M,auxSize,true);
+//       Num.insert_rows(M,auxSize,true); /* population uplifted */
+//       /* inserts 0 for M -> h-l positions */
+//       weights			     = num / (double(N)- 1 +conc); 
+//       weights.subvec(M,(h-1))	= ( (conc/w_star) / (double(N) - 1 + conc) )*ones(auxSize);
+//     }else{ /* num(s(i)) == 1 & w_star == 1, so new location already sampled at M-1 */
+//       weights			     = num / (double(N)- 1 +conc);
+//       weights(M-1)		     = (conc/w_star) / (double(N) - 1 + conc);
+//     } /* end sampling of new locations and computing weights */
+//       
+//     /* draw value for cluster index, s(i) */
+//     /* note that rdrawone() function has minimum value of 0 */
+//     for( ell = 0; ell < h; ell++)
+//     {
+//       s(i)           = ell; /* temporary assignment */
+//       weights(ell)	= weights(ell) * 
+//                             exp( logy_like(i, y, ipr, s, U_last) );
+//     }
+//     weights		     = weights / sum(weights);
+//     // conduct discrete posterior draw for s(i), where min(s(i)) = 0
+//     s(i) 		           = rdrawone(weights, h);
+//     num(s(i))		       += 1;
+//     Num(s(i))          += 1/ipr(i);
+//     
+//     /* remove clusters with no observations  - must be among the w_star new clusters */
+//     loc_keep            = find(num != 0);
+//     num_keep            = loc_keep.n_elem;
+//     num                 = num( loc_keep );
+//     Num                 = Num( loc_keep );
+//     theta_star		      = theta_star.cols( loc_keep );
+//     wpm                 = wpm.cols( loc_keep );
+//     /* Armadillo doesn't have a non-contiguous operation on slices */
+//     /* must update slice-by-slice */
+//     U_keep.set_size(T,T,num_keep);
+//     for( ell = 0; ell < num_keep; ell++ )
+//     {
+//       U_keep.slice(ell)   = U_last.slice( loc_keep(ell) );
+//     }
+//     
+//     /* replace U_last with U_keep, which holds choleskys linked to observations */
+//     U_last.set_size(T,T,num_keep);
+//     U_last              = U_keep;
+//     /* if s(i) > startPos-1, then the drawn cluster is from the w_star new */
+//     /* so we need to make it contiguous through shifting it to the last cluster */
+//     if( s(i) > (startPos-1) ) /* we're replacing the original startPos position */
+//     {
+//       s(i)	          = startPos;
+//       // since sampling one observation, i = 1,...N, at a time,
+//       // if one of the w_star new clusters is picked, it can only have
+//       // a single observation (for a single new cluster at location, startPos)
+//       // so we compute a double value for the log-likelihood of 
+//       // rho_star(startPos) to later use for sampling.
+//     }
+//     
+//     /* reset M */
+//     M = theta_star.n_cols;
+//     
+//   } /* end loop i for cluster assignment */
+//   END_RCPP
+// } /* end function auxclusterstep for cluster assignments, s  */	          
+	          
 SEXP pop_Num(const ucolvec& s, const vec& ipr, colvec& Num)
 {
      BEGIN_RCPP 

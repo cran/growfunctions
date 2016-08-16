@@ -279,7 +279,7 @@ fit_compare <- function(objects, H = NULL, label.object = c("gp_rq","gmrf_rw2"),
      suppressWarnings(print(p.t))
      
      
-     fit <- cluster <- est_type <- NULL
+     fit <- cluster <- est_type <- time <- NULL
      return(invisible(list(p.t = p.t, map = map)))
      
 } ## end function gp_car_fit_compare

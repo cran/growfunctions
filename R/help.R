@@ -4,8 +4,8 @@
 #' \tabular{ll}{
 #' Package: \tab growfunctions\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.12\cr
-#' Date: \tab 2015-11-13\cr
+#' Version: \tab 0.13\cr
+#' Date: \tab 2016-07-27\cr
 #' License: \tab GPL (>= 3) \cr
 #' LazyLoad: \tab yes\cr
 #' }
@@ -240,19 +240,19 @@
 #' @name growfunctions-package
 #' @aliases growfunctions package-growfunctions
 #' @docType package
-#' @author Terrance Savitsky \email{tds151@@gmail.com} 
+#' @author Terrance Savitsky \email{tds151@gmail.com} 
 #' @references
-#'     T. D. Savitsky (2014) Bayesian Non-parametric Functional Mixture
+#'     Terrance D. Savitsky (2016) Bayesian Nonparametric Mixture Estimation for Time-Indexed 
+#'     Functional Data in {R}, \emph{Journal of Statistical Software}, Volume 72, Number 2, 
+#'     pages 1 -- 34, \doi{10.18637/jss.v072.i02}.
+#' @references
+#'	T. D. Savitsky, D. Toth (2016) Bayesian Estimation 
+#'	Under Informative Sampling, \emph{Electronic Journal of
+#'	Statistics}, Volume 10, Number 1.
+#' @references
+#'     T. D. Savitsky (2016) Bayesian Non-parametric Functional Mixture
 #'     Estimation for Time-indexed data. submitted to: Survey Methodology.
-#' @references
-#'	T. D. Savitsky, D. Toth and M. Sverchkov (2014) Bayesian Estimation 
-#'	Under Informative Sampling, 
-#'     Submitted to: Electronic Journal of Statistics.
-#' @references
-#'     T. D. Savitsky (2014) Bayesian Non-Parametric Mixture Estimation 
-#'     for Time-Indexed Functional
-#'     Data for \code{R}. To Appear in: Journal of Statistical Software.     
-#' @import reshape2 scales ggplot2 Rcpp RcppArmadillo Matrix spam mvtnorm
+#' @import reshape2 ggplot2 Rcpp Matrix spam mvtnorm
 #' @useDynLib growfunctions
 #' @keywords package
 NULL

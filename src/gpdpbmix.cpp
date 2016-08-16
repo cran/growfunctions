@@ -167,8 +167,8 @@ SEXP GPDPMIXMIS(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o_jitter
     double tau_e         = rgamma(1, a, (1/b))[0];
     // generate {bb_i}
     mat bb(N,T); bb.zeros();
-    colvec h(T); h.zeros(); /* mean of bb_i */
-    colvec b_i(T);
+    // colvec h(T); h.zeros(); /* mean of bb_i */
+    // colvec b_i(T);
     // Globally set noise to 0 - since co-sampling {bb_i}
     int noise       = -1; /* no noise since sampling {bb_i}, GP functional draws */
     // Globally set noise to 0
@@ -179,11 +179,12 @@ SEXP GPDPMIXMIS(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o_jitter
     cube U_last(T,T,M);
     compute_U(theta_star, tau_e, jitter, gp_mod, n_parms, pos_s, Omega_t, Omega_s,
                     noise, U_last); /* noise = 0, since sample {bb_i} */
-    for( i = 0; i < N; i++ )
-    {
-         rmvnchol(U_last.slice(s(i)), h, b_i); /* returns T x 1, b_i */
-         bb.row(i)       = b_i.t();
-    }
+    // for( i = 0; i < N; i++ )
+    // {
+    //      rmvnchol(U_last.slice(s(i)), h, b_i); /* returns T x 1, b_i */
+    //      bb.row(i)       = b_i.t();
+    // }
+    bb.randu();
     
     double conc = 1; /* DP concentration parameter */
                     

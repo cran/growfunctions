@@ -203,7 +203,7 @@ predict_plot <- function(object = NULL, units_label = NULL,
      
      print(p.t)
      
-     value <- fit <- lo <- hi <- form <- NULL
+     value <- fit <- lo <- hi <- form <- time <- NULL
      return(invisible(list(p.fit = p.t, dat.fit = dat_gcp)))
      
 } ## end function predict_plot    

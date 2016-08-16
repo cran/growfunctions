@@ -312,7 +312,7 @@ cluster_plot <- function(object, N_clusters = NULL, time_points = NULL, units_na
      
      suppressWarnings(print(p.t))
      
-     value <- fit <- NULL
+     value <- fit <- time <- NULL
      return(invisible(list(p.cluster = p.c, p.fit = p.t, dat.fit = dat_gcp, 
                            dat.cluster = datb_plot, map = map)))
      
