@@ -99,10 +99,9 @@ plot_gp         <- predict_plot(object = pred_gp,
                                credible = TRUE)  
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

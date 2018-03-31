@@ -36,11 +36,17 @@ RcppExport SEXP GPBFIX(SEXP Ymat, SEXP Otrend, SEXP Oseas, SEXP o_gp_mod, SEXP o
            SEXP o_w, SEXP o_n_slice_iter, 
            SEXP o_y_index, SEXP niterInt, SEXP nburnInt, SEXP nthinInt, 
            SEXP ntuneInt, SEXP o_progress, SEXP o_s, SEXP o_ipr);
-RcppExport SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_C, SEXP o_D, SEXP o_order,  
+RcppExport SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,  
            SEXP niterInt, SEXP nburnInt, SEXP nthinInt,
-           SEXP Minit, SEXP o_a, SEXP o_b, SEXP o_a_tau, SEXP o_b_tau,
-           SEXP shapealph, SEXP ratebeta, 
+           SEXP Minit, SEXP o_w_star, SEXP o_a, SEXP o_b, SEXP o_a_tau, SEXP o_b_tau,
+           SEXP shapealph, SEXP ratebeta, SEXP o_nu,
            SEXP o_progress, SEXP o_jitter, SEXP o_kappa_fast, SEXP o_ipr);
+RcppExport SEXP IGMRFDPMIXCOUNT(SEXP Ymat, SEXP o_E, SEXP o_ksi, SEXP o_C, SEXP o_D, 
+           SEXP o_order, SEXP niterInt, SEXP nburnInt, SEXP nthinInt,
+           SEXP Minit, SEXP o_w_star, SEXP o_a, SEXP o_b, SEXP o_a_tau, SEXP o_b_tau,
+           SEXP shapealph, SEXP ratebeta, SEXP o_nu, SEXP o_Rep, 
+           SEXP o_progress, SEXP o_jitter, SEXP o_kappa_fast, SEXP o_stable_launch,
+           SEXP o_ipr);
 RcppExport SEXP predict_bb(SEXP res, SEXP o_Omegas_tetr, SEXP o_Omegas_tete,
                     SEXP o_Omegat_tetr, SEXP o_Omegat_tete, SEXP o_J);
 RcppExport SEXP predict_gmrf_bb(SEXP res, SEXP o_R, SEXP o_J);
@@ -186,6 +192,36 @@ SEXP move_taue(const arma::mat& y, const arma::mat& gamma, double& tau_e, double
 SEXP move_taue_jitter(const arma::mat& y, const arma::mat& gamma, double& tau_e, double a, double b,
                          double jitter, const arma::vec& ipr);
 SEXP miss_ystep(arma::mat& y_rep, const arma::mat& y, const arma::mat& gamma, double tau_e);
+/* sppmdpmix_moves */
+SEXP auxclusterstep_gmrf(const arma::cube& B, const arma::mat& ksi, 
+                    arma::mat& kappa_star, const arma::uvec& o,
+                    const arma::field<arma::mat>& C, const arma::mat& D, 
+                    arma::mat& u_star, arma::cube& Lambda_star,
+                    arma::mat& as_star, double nu,
+                    const arma::colvec& u_bar, const arma::mat& P_bar, 
+                    arma::ucolvec& s, 
+                    arma::ucolvec& num, unsigned int& M, const int& w_star,
+                    double& conc, int a, int b,
+                    const arma::vec& ipr, arma::colvec& Num);
+SEXP move_ustar(arma::mat& u_star, const arma::mat& ksi,
+                const arma::cube& Lambda_star, const arma::colvec& u_bar,
+                const arma::mat& P_bar, const arma::ucolvec& s);
+SEXP move_Lambdastar(arma::cube& Lambda_star, const arma::mat& as_star, 
+                     const arma::mat& Ksi, const arma::mat& u_star, 
+                     const arma::ucolvec& s, double nu);
+SEXP move_ubar(arma::colvec& u_bar, const arma::mat& u_star,
+               const arma::mat& P_bar);
+SEXP move_Pbar(arma::mat& P_bar, const arma::colvec& u_bar, const arma::mat& u_star);
+SEXP move_as(const arma::mat& P_8, arma::vec& as, double nu, double b);
+double loglike_psi_i(const arma::colvec& psi_i, const arma::mat& Y, 
+                     const arma::mat& E,
+                     int i);
+SEXP move_Psi_i(arma::mat& Psi, const arma::mat& Y, const arma::mat& E,  
+                const arma::mat& gamma, double tau_e, int R);
+SEXP miss_ycount(arma::mat& Y_rep, const arma::mat& Y, 
+                 const arma::mat& E, const arma::mat& Psi);
+SEXP dmarg_count(const arma::colvec& y_vec, const arma::colvec& mu_vec, 
+                 arma::rowvec& devmarg);
 
 #endif     /* GROWFUNCTIONS_H */
 

@@ -133,10 +133,9 @@ fit_plots_gp_2        <- cluster_plot( object = res_gp_2,
 ( nmspe_gp  <- MSPE(res_gp_2, y_short, pos)$nMSPE )    
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

@@ -26,4 +26,3 @@ for the details about different data structures:
 }
 }
 \keyword{manip}
-

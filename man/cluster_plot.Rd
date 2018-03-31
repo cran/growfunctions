@@ -94,10 +94,9 @@ fit_plots_gmrf      <- cluster_plot( object = res_gmrf,
                                      credible = TRUE )   
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

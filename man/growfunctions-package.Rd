@@ -2,8 +2,8 @@
 % Please edit documentation in R/help.R
 \docType{package}
 \name{growfunctions-package}
-\alias{growfunctions}
 \alias{growfunctions-package}
+\alias{growfunctions}
 \alias{package-growfunctions}
 \title{Bayesian Non-Parametric Models for Estimating a Set of Denoised, Latent Functions 
 From an Observed Collection of Domain-Indexed Time-Series}
@@ -11,8 +11,8 @@ From an Observed Collection of Domain-Indexed Time-Series}
 \tabular{ll}{
 Package: \tab growfunctions\cr
 Type: \tab Package\cr
-Version: \tab 0.13\cr
-Date: \tab 2016-07-27\cr
+Version: \tab 0.14\cr
+Date: \tab 2018-03-30\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }
@@ -68,7 +68,9 @@ precision matrix or a
 controls the length scale of the estimated functions and specifies the 
 difference order of the precision matrix in the case of \code{q_type = "tr"}, 
 or the periodicity, in the case \code{q_type = "sn"}.  Typically, \code{q_order} is set to
-\code{1} or \code{2} when \code{q_type = "tr"}, though other values are possible.
+\code{1} or \code{2} when \code{q_type = "tr"}, though other values are possible.  An optional
+\code{N x R} predictor matrix, ksi, may be input to adjust the prior for cluster assignments,
+\code{s}, to produce a dependent product partition model.
 
 \code{\link{MSPE}} Inputs a \code{gpdpgrow()} or \code{gmrfdpgrow()} object estimated where
 some data values deliberately set to missing (\code{NA}) and produces an out-of-sample 
@@ -245,9 +247,6 @@ fit_compare( objects = objects,
 }
 
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \references{
 Terrance D. Savitsky (2016) Bayesian Nonparametric Mixture Estimation for Time-Indexed 
     Functional Data in {R}, \emph{Journal of Statistical Software}, Volume 72, Number 2, 
@@ -260,5 +259,7 @@ Statistics}, Volume 10, Number 1.
 T. D. Savitsky (2016) Bayesian Non-parametric Functional Mixture
     Estimation for Time-indexed data. submitted to: Survey Methodology.
 }
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}
 \keyword{package}
-

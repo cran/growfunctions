@@ -74,10 +74,9 @@ An internal function to \code{\link{gpdpgrow}}
 \note{
 Intended as an internal function for \code{\link{gpdpgrow}}
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

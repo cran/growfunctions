@@ -131,10 +131,9 @@ y_obs                       <- dat_sim$y_obs
 T                           <- ncol(y_obs)
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

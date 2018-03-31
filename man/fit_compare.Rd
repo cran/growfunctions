@@ -136,10 +136,9 @@ fit_compare( objects = objects,
  units_name = "state", units_label = cps$st)                                  
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

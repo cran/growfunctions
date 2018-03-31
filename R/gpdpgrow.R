@@ -396,7 +396,7 @@ gpdpgrow.default		<- function(y, ipr = NULL, time_points = NULL, gp_cov = c("rq"
                                       noise_shape, noise_rate, lower, 
                                       upper, w_star, w, n_slice_iter, y_index, n.iter, n.burn, n.thin, 
                                       n.tune, M_init, dp_shape, dp_rate, progress)
-               res$optpartition$y[y == -9]   <- NA ## convert missing values back from -9 to NA
+               res$optpartition$y[res$optpartition$y == -9]   <- NA ## convert missing values back from -9 to NA
                ## need this object in cluster_plot() for plotting data vs. fitted functions
           }else{ ## cluster == TRUE and no missing values: 
                ## marginalize over {bb_i} for sampling the GP parameters.  May be quicker.
@@ -422,7 +422,7 @@ gpdpgrow.default		<- function(y, ipr = NULL, time_points = NULL, gp_cov = c("rq"
                                        noise_shape, noise_rate, lower, upper,
                                        w, n_slice_iter, y_index, n.iter, n.burn, n.thin, n.tune, 
                                        progress, s)
-               res$optpartition$y[y == -9]   <- NA ## convert missing values back from -9 to NA
+               res$optpartition$y[res$optpartition$y == -9]   <- NA ## convert missing values back from -9 to NA
           }else{ ## no clustering and no missing values
                if( fix == TRUE )
                {

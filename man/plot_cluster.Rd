@@ -42,10 +42,9 @@ A list object containing the plot of estimated functions, faceted by cluster,
 \description{
 An internal function of the \code{growfunctions} package.
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gpdpgrow}}, \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}

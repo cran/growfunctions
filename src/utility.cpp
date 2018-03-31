@@ -204,7 +204,7 @@ SEXP rmvnsample(const mat& phi, const colvec& h, colvec& b)
 unsigned long rdrawone(const colvec& pr, unsigned long k)
 {
         // extract sort index of pr in descending order
-        uvec pOrderIndex = sort_index(pr,1);
+        uvec pOrderIndex = sort_index(pr,"descend");
         // draw uniform random variate we will compare
         // to cdf composed from categories in descending
         // order

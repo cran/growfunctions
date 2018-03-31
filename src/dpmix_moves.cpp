@@ -133,7 +133,7 @@ SEXP clusterstep(const cube& B, mat& kappa_star, mat& B1, const uvec& o,
             }
             else
             {
-                weights = weights / sweights;
+                weights /= sweights;
             }
 
             // conduct discrete posterior draw for s(j)
@@ -469,7 +469,7 @@ SEXP move_B_alt(const mat& y, cube& B, const mat& kappa_star, const field<mat>& 
      int K     = B.n_slices;
      int N     = y.n_rows;
      int T     = D.n_cols;
-     colvec bbar_ki(T); bbar_ki.zeros();
+     double bbar_kij = 0; 
      rowvec gammatilde_ki(T); gammatilde_ki.zeros();
      rowvec ytilde_ki(T); ytilde_ki.zeros();
      rowvec d_k(T);
@@ -488,9 +488,9 @@ SEXP move_B_alt(const mat& y, cube& B, const mat& kappa_star, const field<mat>& 
                     ytilde_ki(j)        = y(i,j) - gammatilde_ki(j);
                     // mean of univariate iGMRF, b_kij = 1/d_kj * (omega_kj(-j) * b_ki(-j))
                     B.slice(k)(i,j)     = 0;
-                    bbar_ki(j)          = dot( C(k,0).row(j), B.slice(k).row(i) );
+                    bbar_kij            = as_scalar(dot( C(k,0).row(j), B.slice(k).row(i) ));
                     e_ij                = tau_e*ytilde_ki(j) 
-                                             + d_k(j)*kappa_star(k,s(i)) * bbar_ki(j);
+                                             + d_k(j)*kappa_star(k,s(i)) * bbar_kij;
                     phi_ij              = tau_e + d_k(j)*kappa_star(k,s(i));
                     h_ij                = (e_ij / phi_ij);
                     bkij                = rnorm( 1, (h_ij), sqrt(1/phi_ij) )[0];

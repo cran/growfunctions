@@ -4,9 +4,9 @@
 \alias{gmrfdpgrow}
 \title{Bayesian instrinsic Gaussian Markov Random Field model for dependent time-indexed functions}
 \usage{
-gmrfdpgrow(y, ipr, q_order, q_type, q_shape, q_rate, tau_shape, tau_rate,
-  dp_shape, dp_rate, M_init, n.iter, n.burn, n.thin, progress, jitter,
-  kappa_fast)
+gmrfdpgrow(y, ksi, E, ipr, q_order, q_type, q_shape, q_rate, tau_shape,
+  tau_rate, dp_shape, dp_rate, M_init, w_star, n.iter, n.burn, n.thin, nu, Rep,
+  progress, jitter, kappa_fast, stable_launch)
 }
 \arguments{
 \item{y}{A multivariate continuous response, specified as an \emph{N x T} matrix, where \code{N}
@@ -14,10 +14,20 @@ denotes the number of functions and \code{T}, the number of time points per func
 missing-at-random values are allowed and will be estimated from the posterior
 predictive distribution.  Missing cells should be denoted with \code{NA}.}
 
-\item{ipr}{An optional input vector of inclusion probabilities for each observation unit in the case
-the observed data were acquired through an informative sampling design, so that unbiased
-inference about the population requires adjustments to the observed sample.  Defaults to
-\code{ipr = rep(1,nrow(y))} indicating an iid sample.}
+\item{ksi}{An \emph{N x P} matrix of N observations of P predictors to be used
+in prior probability of co-clustering of set of N, T x 1 observations. 
+Defaults to \code{ksi = NULL} such that predictors are not used to a priori
+determine co-clustering probabilities.}
+
+\item{E}{A multivariate offset variable, specified as an \emph{N x T} matrix, in the case
+that \code{y} is of type count data.  The offset will be used to model the \code{y}
+as under a poisson lognormal where \code{y ~ Pois(E*exp(Psi))}.  Defaults to \code{NULL},
+in which case the response type is assumed continuous.}
+
+\item{ipr}{An optional input vector of inclusion probabilities for each observation unit 
+in the case the observed data were acquired through an informative sampling design, so 
+that unbiased inference about the population requires adjustments to the observed sample
+Defaults to \code{ipr = rep(1,nrow(y))} indicating an iid sample.}
 
 \item{q_order}{An integer vector of length \code{K} to select the order for each iGMRF precision term.
 e.g. If the first term is a RW2 and there is a second is a 3-month seasonality term, where the time
@@ -49,12 +59,33 @@ Defaults to \code{tau_rate = 1}.}
 \item{M_init}{Starting number of clusters of \code{nrow(y)} units to initialize sampler.
 Defaults to \code{M_init = nrow(y)}.}
 
+\item{w_star}{Integer value denoting the number of cluster locations to sample ahead of 
+observations in the auxiliary Gibbs sampler used to sample the number of clusters
+and associated cluster assignments.  A higher value reduces sampling auto-correlation, 
+but increases computational burden.  Defaults to \code{w_star = 2}.  The auxiliary
+Gibbs sampler is only used in the case that \code{!is.null(ksi)}, for predictor-
+assisted clustering; otherwise, the full conditionals for cluster assigment are
+conjugate.}
+
 \item{n.iter}{Total number of MCMC iterations.}
 
 \item{n.burn}{Number of MCMC iterations to discard.
 \code{gmrfdpgrow} will return \code{(n.iter - n.burn)} posterior samples.}
 
 \item{n.thin}{Gap between successive sampling iterations to save.}
+
+\item{nu}{The degree of freedom parameter for the Huang and Wand prior on precision
+\code{R x R} matrix locations, \code{Lambda_star}, 
+in the case that \code{N x R} predictors, \code{ksi},
+are entered to instantiate a predictor-dependent prior for co-clustering.
+Default value is \code{4}.}
+
+\item{Rep}{The number of times to draw samples of the \code{N x T} log-mean
+parameters, \code{Psi}, for each MCMC iteration
+under a Poisson-lognormal model when the response
+type for \code{y} is count (not continuous), which is indicated by inputing
+an offset matrix, \code{E}.
+Default value is \code{1}.}
 
 \item{progress}{A boolean value denoting whether to display a progress bar during model execution.
 Defaults to \code{progress = true}.}
@@ -67,6 +98,12 @@ Defaults to \code{jitter = 0.0}.}
 versus joint Gaussian (on random effects, \code{bb}, given \code{kappa}.  The
 former is faster, but numerically less stable. 
 Defaults to \code{kappa_fast = FALSE}.}
+
+\item{stable_launch}{A boolean indicator on whether to generate initial values for
+\code{N x T} log-mean, \code{Psi}, when \code{y} are count data from a Gaussian
+prior distribution, which can induce numerical launch instabilities, or whether 
+to initialize as \code{y/E} (where missing values in \code{y} are imputed).
+Defaults to \code{stable_launch = TRUE}.}
 }
 \value{
 S3 \code{gmrfdpgrow} object, for which many methods are available to return and view results.  
@@ -123,9 +160,6 @@ fit_plots_gmrf      <- cluster_plot( object = res_gmrf,
                                      credible = TRUE )    
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com} Daniell toth \email{danielltoth@yahoo.com}
-}
 \references{
 T. D. Savitsky and D. Toth (2014) Bayesian Non-parametric Models for Collections of Time-
     indexed Functions. submitted to: JRSS Series A (Statistics in Society).
@@ -139,5 +173,7 @@ T. D. Savitsky (2014) Bayesian Non-Parametric Mixture Estimation for Time-Indexe
 \seealso{
 \code{\link{gmrfdpgrow}}
 }
+\author{
+Terrance Savitsky \email{tds151@gmail.com} Daniell toth \email{danielltoth@yahoo.com}
+}
 \keyword{model}
-

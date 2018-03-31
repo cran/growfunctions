@@ -186,9 +186,6 @@ fit_plots_gp        <- cluster_plot( object = res_gp,
 
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com} Daniell Toth \email{danielltoth@yahoo.com}
-}
 \references{
 T. D. Savitsky and D. Toth (2014) Bayesian Non-parametric Models for Collections of Time-
     indexed Functions. submitted to: JRSS Series A (Statistics in Society).
@@ -202,5 +199,7 @@ T. D. Savitsky (2014) Bayesian Non-Parametric Mixture Estimation for Time-Indexe
 \seealso{
 \code{\link{gmrfdpgrow}}
 }
+\author{
+Terrance Savitsky \email{tds151@gmail.com} Daniell Toth \email{danielltoth@yahoo.com}
+}
 \keyword{model}
-

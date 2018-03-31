@@ -3,11 +3,11 @@ using namespace Rcpp;
 using namespace arma;
 using namespace std;
 
-SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,  
+SEXP IGMRFDPMIXCOUNT(SEXP Ymat, SEXP o_E, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,  
         SEXP niterInt, SEXP nburnInt, SEXP nthinInt,
         SEXP Minit, SEXP o_w_star, SEXP o_a, SEXP o_b, SEXP o_a_tau, SEXP o_b_tau,
-        SEXP shapealph, SEXP ratebeta, SEXP o_nu,
-        SEXP o_progress, SEXP o_jitter, SEXP o_kappa_fast,
+        SEXP shapealph, SEXP ratebeta, SEXP o_nu, SEXP o_Rep, 
+        SEXP o_progress, SEXP o_jitter, SEXP o_kappa_fast, SEXP o_stable_launch,
         SEXP o_ipr)
 {
     BEGIN_RCPP
@@ -28,6 +28,11 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     }else{
       ksi = as<mat>(o_ksi);
     }
+    /* Normalizing offset, N x T, E.
+     * 
+     */
+    mat E   = as<mat>(o_E);
+    E.elem(find(E == 0)).ones(); /* set 0 values in county-month population equal to 1 */
     /* memo: on R side: Q_s12  = as.matrix(precmat.season(T, season=12)) */
     /*                  Q_s12  <- as(Q_s12, "dgCMatrix") */
     List Cr(o_C); /* K, T x T iGMRF normalized adjacency matrices - defined from dgCMatrix in R */
@@ -38,6 +43,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     vec ipr_dummy(ipr.n_elem); ipr_dummy.ones(); /* Use to make no direct adjustments to weights in clustering algorithm */
     int nu    = as<int>(o_nu); /* df parameter for H&W prior on precision locs, Lambda_star */
     int w_star= as<int>(o_w_star); /* tuning parameter for Algorithm 8 cluster assignment */
+    int Rep   = as<int>(o_Rep); /* Number of draws per sampling iteration for Psi */
     int niter = as<int>(niterInt); /* sampler iterations */
     int nburn = as<int>(nburnInt); /* sampler burnin */
     int nthin = as<int>(nthinInt); /* sampler thinning */
@@ -52,6 +58,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     double b_tau = as<double>(o_b_tau); /* GP parameters (tau) hyperparameters */
     int progress = as<int>(o_progress); /* indicator for whether to display a progress bar */
     double jitter = as<double>(o_jitter); /* jitter on posterior rate of kappa_star to stabilize */
+    bool stable_launch = as<bool>(o_stable_launch); /* how to initialize log-mean, Psi */
     
     // Extract key row and column dimensions we will need to sample parameters
     int N      = Yr.nrow(), T = Yr.ncol(); /* data dimensions */
@@ -60,7 +67,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     unsigned int m;
     
     /* data */
-    mat y(Yr.begin(), N, T, false);
+    mat Y(Yr.begin(), N, T, false);
     // arma objects
     mat D(Dr.begin(),K,T,false); /* dense matrix where each row holds the T diagonal for Q_k */
     // field<sp_mat> C(K,1); /* list of normalized adjacency matrices */
@@ -175,16 +182,44 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
       } /* end loop k over K truncated number of global clusters */
         
     } /* end condition on whether employ spatial weights for local cluster assignment */
-    
-    /* define a replicated data matrix to capture sampled missing values */
-    mat y_rep  = y; /* if no missing values, this will never be updated, which is fine */
-    
+        
     double conc     = 1; /* DP concentration parameter */
     /* global noise precision parameter */
     double tau_e    = rgamma(1, a_tau, (1/b_tau))[0];
     
+    /* define a replicated data matrix to capture sampled missing values */
+    mat Y_rep  = Y; /* if no missing values, this will never be updated, which is fine */
+    
+    /* draw initial values for n x T latent log-mean, Psi */
+    mat Psi(N,T); Psi.zeros();
+    mat psi_bar     = gamma;
+    if( !stable_launch )  
+    {
+      for( i = 0; i < N; i++ )
+      {
+        for( j = 0; j < T; j++ )
+        {
+          Psi(i,j) = R::rnorm(psi_bar(i,j),1/sqrt(tau_e));
+        } /* end loop j over time points */
+      } /* end loop i over areas */
+    }else{ /* stable launch */
+      /* initial value for numerical stability */
+      /* fill in missing values in Y_rep */
+      uvec na_vals                = find(Y == -9);
+      int n_na                    = na_vals.n_elem;
+      Y_rep.elem( na_vals )       = randu<vec>(n_na) + E.elem( na_vals ); /* always > E */
+      Psi                         = log( Y_rep + 1 ) - log( E + 1 );
+    } /* end condition on whether to launch Psi in a more stable manner */
+    /* rather than by drawing it from the model under initial hyperparameter values */
+    
+    /* mean, Y_bar, of Y */
+    mat Y_mean    = E % exp( Psi );
+    mat Y_rate    = Y_rep / E; /* there are no zeros in E */
+    
+    
     /* initialize vector of residuals */
-    colvec resid(N*T); resid.zeros();
+    colvec resid(N*T), y_vec(N*T), mu_vec(N*T); 
+    resid.zeros(); y_vec.zeros(); mu_vec.zeros();
     /* fit assessment - related measures */
     double deviance = 0;  ucolvec ordscore(nkeep); ordscore.zeros();
     mat phat(N,N); phat.zeros(); /* empirical co-clustering probability matrix */
@@ -210,6 +245,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     field<cube> Lambda_stars(nkeep,1); /* holds R x R x M cube of covariance locations */
     field<mat> as_stars(nkeep,1); /* R x M matrix of H&W hyperparms for Lambda_star */
     mat u_bars(nkeep,R); /* R x 1 mean of u_star */
+    cube P_bars(R,R,nkeep); /* R x R prior precision of u_star */
     /* use kappa_star for prediction */
     /* sum over K functions, gamma */
     mat bb(nkeep,(N*T)); /* N is fast-moving */
@@ -220,7 +256,10 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
           f(k,0).set_size(nkeep,(N*T));
     }
     /* capture replicated y values */
-    mat Y_rep(nkeep,(N*T));
+    mat Psis(nkeep,(N*T)); /* n is fast, T is slow */
+    mat Y_reps(nkeep,(N*T));
+    mat Y_means(nkeep,(N*T)); /* (E[i,j]*exp(Psi[i,j])), n is fast, T is slow */
+    mat Y_rates(nkeep,(N*T)); /* (Y[i,j]/E[i,j]), n is fast, T is slow */
     /* non-cluster parameters */
     colvec Tau_e(nkeep);
  
@@ -237,13 +276,15 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
              if( (p % 450) == 0 ) Rcout << "Production Interation: " << p << endl;
         }
       
-        if( any(vectorise(y) == -9) )
+        if( any(vectorise(Y) == -9) )
         {
-             miss_ystep(y_rep, y, gamma, tau_e);
+          miss_ycount(Y_rep, Y, E, Psi);
         }
+        /* sample N x T log-mean, Psi, of Poisson likelihood on Y */
+        move_Psi_i(Psi, Y_rep, E, gamma, tau_e, Rep);
         /* after filling in missing values in y_rep, update estimated functions in N x T x K, B */
         //move_B(y_rep, B, kappa_star, C, gamma, D, s, tau_e);
-        move_B_alt(y_rep, B, kappa_star, C, gamma, D, s, tau_e);
+        move_B_alt(Psi, B, kappa_star, C, gamma, D, s, tau_e);
         /* M changes iteration-to-iteration, so dimension of theta_star will update */
         /* will adjust size of kappa_star(k,m) as M changes, as well as updating s */
         /* Have to move clusters before kappa because use B1 (quadratic product) in move_kappastar */
@@ -283,7 +324,11 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
            */
             
         concstep(conc, M, N, ac, bc);
-        move_taue_jitter(y_rep, gamma, tau_e, a_tau, b_tau, jitter, ipr);
+        move_taue_jitter(Psi, gamma, tau_e, a_tau, b_tau, jitter, ipr);
+        
+        Y_mean      = E % exp( Psi ); /* n x T mean of Y, which is our modeled estimate */
+        Y_rate      = Y_rep / E ; /* n x T employment rate, Y / E to compare to exp(Psi)*/
+        
         if(p >= nburn)
         {
             kk = p - nburn;
@@ -301,10 +346,15 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
                u_stars(oo,0)                 = u_star; /* R x M */
                as_stars(oo,0)                = as_star; /* R x M */
                u_bars.row(oo)                = u_bar.t(); /* 1 x R */
+               P_bars.slice(oo)              = P_bar; /* R x R */
                Conc(oo)                      = conc;
                /* vectorize N x T gamma, by columns, so N is fast-moving */
                bb.row(oo)                    = vectorise( gamma ).t();
-               Y_rep.row(oo)                 = vectorise( y_rep ).t();
+               Y_reps.row(oo)                = vectorise( Y_rep ).t();
+               Y_means.row(oo)               = vectorise( Y_mean ).t();
+               Y_rates.row(oo)               = vectorise( Y_rate ).t();
+               /* vectorise n x T matrix, Psi, by column - so n is faster than T */
+               Psis.row(oo)                  = vectorise( Psi ).t();
                for( k = 0; k < K; k++ ) /* loop over K iGMRF terms */
                {                               /* 1 x N*T */
                   f(k,0).row(oo)             = vectorise( B.slice(k) ).t(); 
@@ -316,10 +366,13 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
                Num_ht(oo,0)                  = num_ht;
                /* compute chain acceptance statistics */ 
                /* N is the fast-moving index, T is the slow-moving index */
-               resid                         = vectorise( y_rep ); /* y is an N x T mat */
-               resid                         -= bb.row(oo).t(); 
-               deviance                      =  dev(resid, tau_e); /* scalar double deviance */
-               dmarg(resid, tau_e, devmarg); /* 1 x N*T vector of densities*/;
+               y_vec                         = vectorise( Y_rep ); /* y is an N x T mat */
+               mu_vec                        = exp( vectorise(Psi) );
+               /* residual for a Poisson likelihood */
+               resid                         = y_vec * log(y_vec / mu_vec)
+                                                    - (y_vec - mu_vec); 
+               deviance                      =  2 * sum(resid); /* scalar double deviance */
+               dmarg_count(y_vec, mu_vec, devmarg); /* 1 x N*T vector of densities*/;
                Deviance(oo)                  = deviance;
                Devmarg.row(oo)               = devmarg;
                Resid.row(oo)                 = resid.t();
@@ -330,7 +383,7 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
     
     // compute y_bar based on averaging over MCMC samples that include missing data.
     rowvec y_bar_vec     = mean( Y_rep ); /* by columns */
-    mat y_bar            = reshape( y_bar_vec, N, T ); /* by column since N is fast-moving (for an N x T matrix) */
+    mat Y_bar            = reshape( y_bar_vec, N, T ); /* by column since N is fast-moving (for an N x T matrix) */
     
     // compute FIT statistics
     // compute least squares cluster
@@ -344,11 +397,16 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
                                            Rcpp::Named("phat")        = phat,
                                            //Rcpp::Named("eigraw")      = eigraw,
                                            /* N x T data matrix need for plotting fit */
-                                           Rcpp::Named("y")           = y,
-                                           Rcpp::Named("y_bar")       = y_bar,
-                                           Rcpp::Named("Y_reps")      = Y_rep, 
+                                           Rcpp::Named("y")           = Y,
+                                           Rcpp::Named("y_bar")       = Y_bar,  
+                                           Rcpp::Named("Y_reps")      = Y_reps, 
+                                           Rcpp::Named("Y_rates")     = Y_rates,
+                                           Rcpp::Named("Y_means")     = Y_means,
+                                           Rcpp::Named("Psis")        = Psis,
                                            Rcpp::Named("Q")           = Q,
-                                           Rcpp::Named("q_order")     = o
+                                           Rcpp::Named("q_order")     = o,
+                                           Rcpp::Named("u_bars")      = u_bars,
+                                           Rcpp::Named("P_bars")      = P_bars
                                            );
     // DIC
     dic3comp(Deviance, Devmarg, devres); /* devres = c(dic,dbar,dhat,pd) */
@@ -365,7 +423,6 @@ SEXP IGMRFDPMIX(SEXP Ymat, SEXP o_ksi, SEXP o_C, SEXP o_D, SEXP o_order,
                                   Rcpp::Named("Lambda_stars")    = Lambda_stars,
                                   Rcpp::Named("u_stars")         = u_stars,
                                   Rcpp::Named("as_stars")        = as_stars,
-                                  Rcpp::Named("u_bars")          = u_bars,
                                   Rcpp::Named("Conc")            = Conc,
                                   Rcpp::Named("bb")              = bb,
                                   Rcpp::Named("f")               = f,

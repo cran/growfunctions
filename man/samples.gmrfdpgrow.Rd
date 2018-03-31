@@ -15,4 +15,3 @@
 provides posterior sampled values for every model parameter of a
 \code{gmrfdpgrow} object
 }
-

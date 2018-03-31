@@ -163,6 +163,13 @@ cluster_plot <- function(object, N_clusters = NULL, time_points = NULL, units_na
                                   size = 1, linetype = 2, se = FALSE, colour = "brown",
                                   method = "loess")
      f              <- facet_wrap(~cluster, scales = "fixed")
+     options           <- theme(axis.title.x = element_text(size=18),
+                                axis.title.y = element_text(size=18),
+                                axis.text.x  = element_text(size=14,
+                                                            angle=-90,hjust=0),
+                                axis.text.y  = element_text(size=14),
+                                ##     legend.margin = margin(5, 5, 5, 5),
+                                strip.text   = element_text(size=18))
      if( length(y.axis.label) > 0 )
      {
           if( length(x.axis.label) > 0 )
@@ -183,10 +190,10 @@ cluster_plot <- function(object, N_clusters = NULL, time_points = NULL, units_na
      if( smoother == TRUE)
      {
           p.c     		<- p.c + l + l.2 + f + theme_bw() + axis + 
-                                   theme(axis.text.x=element_text(angle=90, hjust=0))
+                                   options
      }else{ ## no smoother
           p.c          	<- p.c + l + f + theme_bw() + axis + 
-                              theme(axis.text.x=element_text(angle=90, hjust=0))
+                              options
      }
      suppressWarnings(print(p.c))
      
@@ -302,12 +309,21 @@ cluster_plot <- function(object, N_clusters = NULL, time_points = NULL, units_na
      }
 
      f				<- facet_wrap(as.formula(paste("cluster ~", units_name)), scales="fixed")
+     options           <- theme(axis.title.x = element_text(size=18),
+                                axis.title.y = element_text(size=18),
+                                axis.text.x  = element_text(size=14,
+                                                            angle=-90,hjust=0),
+                                axis.text.y  = element_text(size=14),
+                                # legend.title = element_text(size=12),
+                                # legend.text = element_text(size=12),
+                                ##     legend.margin = margin(5, 5, 5, 5),
+                                strip.text   = element_text(size=18))
      if( credible == FALSE )
      {
-          p.t          	<- p.t + l + f + axis + l.2 + l.3 + theme_bw() 
+          p.t          	<- p.t + l + f + axis + l.2 + l.3 + theme_bw() + options
      }else{ ## plot credible intervals
           ci             <- geom_ribbon(aes(ymin=lo,ymax=hi),alpha=0.2)
-          p.t            <- p.t + l + ci + f + axis + l.2 + l.3 + theme_bw() 
+          p.t            <- p.t + l + ci + f + axis + l.2 + l.3 + theme_bw()  + options
      }
      
      suppressWarnings(print(p.t))

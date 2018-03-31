@@ -61,10 +61,9 @@ plot_gmrf       <- predict_plot(object = pred_gmrf,
                                credible = FALSE)
 }
 }
-\author{
-Terrance Savitsky \email{tds151@gmail.com}
-}
 \seealso{
 \code{\link{gmrfdpgrow}}
 }
-
+\author{
+Terrance Savitsky \email{tds151@gmail.com}
+}
