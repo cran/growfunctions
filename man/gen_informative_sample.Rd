@@ -4,11 +4,23 @@
 \alias{gen_informative_sample}
 \title{Generate a finite population and take an informative single or two-stage sample.}
 \usage{
-gen_informative_sample(clustering = TRUE, two_stage = FALSE,
-  theta = c(0.2, 0.7, 1), M = 3, theta_star = matrix(c(0.3, 0.3, 0.3,
-  0.31, 0.72, 2.04, 0.58, 0.83, 1), 3, 3, byrow = TRUE), gp_type = "rq",
-  N = 10000, T = 15, L = 10, R = 8, I = 4, n = 750,
-  noise_to_signal = 0.05, incl_gradient = "medium")
+gen_informative_sample(
+  clustering = TRUE,
+  two_stage = FALSE,
+  theta = c(0.2, 0.7, 1),
+  M = 3,
+  theta_star = matrix(c(0.3, 0.3, 0.3, 0.31, 0.72, 2.04, 0.58, 0.83, 1), 3, 3, byrow =
+    TRUE),
+  gp_type = "rq",
+  N = 10000,
+  T = 15,
+  L = 10,
+  R = 8,
+  I = 4,
+  n = 750,
+  noise_to_signal = 0.05,
+  incl_gradient = "medium"
+)
 }
 \arguments{
 \item{clustering}{Boolean input on whether want population generated from clusters of covariance 

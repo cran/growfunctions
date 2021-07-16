@@ -2,11 +2,34 @@
 % Please edit documentation in R/gmrfdpgrow.R
 \name{gmrfdpgrow}
 \alias{gmrfdpgrow}
+\alias{gmrfdpgrow.default}
 \title{Bayesian instrinsic Gaussian Markov Random Field model for dependent time-indexed functions}
 \usage{
-gmrfdpgrow(y, ksi, E, ipr, q_order, q_type, q_shape, q_rate, tau_shape,
-  tau_rate, dp_shape, dp_rate, M_init, w_star, n.iter, n.burn, n.thin, nu, Rep,
-  progress, jitter, kappa_fast, stable_launch)
+gmrfdpgrow(
+  y,
+  ksi,
+  E,
+  ipr,
+  q_order,
+  q_type,
+  q_shape,
+  q_rate,
+  tau_shape,
+  tau_rate,
+  dp_shape,
+  dp_rate,
+  M_init,
+  w_star,
+  n.iter,
+  n.burn,
+  n.thin,
+  nu,
+  Rep,
+  progress,
+  jitter,
+  kappa_fast,
+  stable_launch
+)
 }
 \arguments{
 \item{y}{A multivariate continuous response, specified as an \emph{N x T} matrix, where \code{N}

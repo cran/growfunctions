@@ -8,9 +8,33 @@ y ~ poisson(E*exp(Psi))
 Psi ~ N(gamma,tau_e^-1)
 which is a Poisson-lognormal model}
 \usage{
-gmrfdpcountPost(y, E, ksi, ipr, C, D, q_order, q_type, n.iter, n.burn, n.thin,
-  M_init, w_star, q_shape, q_rate, tau_shape, tau_rate, dp_shape, dp_rate, nu,
-  Rep, progress, jitter, kappa_fast, stable_launch)
+gmrfdpcountPost(
+  y,
+  E,
+  ksi,
+  ipr,
+  C,
+  D,
+  q_order,
+  q_type,
+  n.iter,
+  n.burn,
+  n.thin,
+  M_init,
+  w_star,
+  q_shape,
+  q_rate,
+  tau_shape,
+  tau_rate,
+  dp_shape,
+  dp_rate,
+  nu,
+  Rep,
+  progress,
+  jitter,
+  kappa_fast,
+  stable_launch
+)
 }
 \arguments{
 \item{y}{An \emph{N x T} matrix of N observations of \emph{T x 1} functions}

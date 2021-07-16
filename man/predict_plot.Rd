@@ -4,10 +4,17 @@
 \alias{predict_plot}
 \title{Plot estimated functions both at estimated and predicted time points with 95\% credible intervals.}
 \usage{
-predict_plot(object = NULL, units_label = NULL, type_label = c("fitted",
-  "predicted"), time_points = NULL, date_label = NULL,
-  x.axis.label = NULL, y.axis.label = NULL, single_unit = FALSE,
-  credible = TRUE)
+predict_plot(
+  object = NULL,
+  units_label = NULL,
+  type_label = c("fitted", "predicted"),
+  time_points = NULL,
+  date_label = NULL,
+  x.axis.label = NULL,
+  y.axis.label = NULL,
+  single_unit = FALSE,
+  credible = TRUE
+)
 }
 \arguments{
 \item{object}{A \code{gpdpgrow.predict} or \code{gmrfdpgrow.predict} object, obtained from 

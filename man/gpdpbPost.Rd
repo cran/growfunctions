@@ -4,9 +4,33 @@
 \alias{gpdpbPost}
 \title{Run a Bayesian functional data model under a GP prior whose parameters employ a DP prior}
 \usage{
-gpdpbPost(y, ipr, Omega_t, Omega_s, gp_mod, jitter, b_move, gp_shape, gp_rate,
-  noise_shape, noise_rate, lower, upper, w_star, w, n_slice_iter, y_index,
-  n.iter, n.burn, n.thin, n.tune, M_init, dp_shape, dp_rate, progress)
+gpdpbPost(
+  y,
+  ipr,
+  Omega_t,
+  Omega_s,
+  gp_mod,
+  jitter,
+  b_move,
+  gp_shape,
+  gp_rate,
+  noise_shape,
+  noise_rate,
+  lower,
+  upper,
+  w_star,
+  w,
+  n_slice_iter,
+  y_index,
+  n.iter,
+  n.burn,
+  n.thin,
+  n.tune,
+  M_init,
+  dp_shape,
+  dp_rate,
+  progress
+)
 }
 \arguments{
 \item{y}{An \emph{N x T} matrix of N observations of \emph{T x 1} functions. \code{y} may\

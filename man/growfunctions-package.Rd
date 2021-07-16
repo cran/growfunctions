@@ -85,7 +85,7 @@ on data not used for estimation.
 \code{gpdpgrow()} or iGMRF precision parameters from \code{gmrfdpgrow()}
 to predict functions at \emph{future} time points beyond the range of the data 
 from their posterior predictive distributions. Both \code{gpdpgrow()} and \code{gmrfdpgrow()}
-will predict missing function values in the range of the data.
+will predict missing function values in the range of the data.  
 
 PLOT FUNCTIONS
 

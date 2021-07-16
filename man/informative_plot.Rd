@@ -4,9 +4,15 @@
 \alias{informative_plot}
 \title{Plot credible intervals for parameters to compare ignoring with weighting an informative sample}
 \usage{
-informative_plot(objects = NULL, objects_labels = c("ignore", "weight"),
-  map = NULL, units_name = NULL, model = "gp", true_star = NULL,
-  map_true = NULL)
+informative_plot(
+  objects = NULL,
+  objects_labels = c("ignore", "weight"),
+  map = NULL,
+  units_name = NULL,
+  model = "gp",
+  true_star = NULL,
+  map_true = NULL
+)
 }
 \arguments{
 \item{objects}{A list of objects, either all outputs from gpdpgrow(), or all from gmrfdpgrow().

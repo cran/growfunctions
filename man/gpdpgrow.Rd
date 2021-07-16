@@ -2,11 +2,37 @@
 % Please edit documentation in R/gpdpgrow.R
 \name{gpdpgrow}
 \alias{gpdpgrow}
+\alias{gpdpgrow.default}
 \title{Bayesian non-parametric dependent Gaussian process model for time-indexed functional data}
 \usage{
-gpdpgrow(y, ipr, time_points, gp_cov, sn_order, jitter, gp_shape, gp_rate,
-  noise_shape, noise_rate, dp_shape, dp_rate, M_init, lower, upper, sub_size,
-  w_star, w, n.iter, n.burn, n.thin, n.tune, progress, b_move, cluster, s)
+gpdpgrow(
+  y,
+  ipr,
+  time_points,
+  gp_cov,
+  sn_order,
+  jitter,
+  gp_shape,
+  gp_rate,
+  noise_shape,
+  noise_rate,
+  dp_shape,
+  dp_rate,
+  M_init,
+  lower,
+  upper,
+  sub_size,
+  w_star,
+  w,
+  n.iter,
+  n.burn,
+  n.thin,
+  n.tune,
+  progress,
+  b_move,
+  cluster,
+  s
+)
 }
 \arguments{
 \item{y}{A multivariate continuous response, specified as an \emph{N x T} matrix, where \code{N}

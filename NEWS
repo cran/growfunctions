@@ -73,3 +73,7 @@ function multiplicative input to the prior distribution on cluster assignment.
 * Note that we had to switch the sampling algorithm for cluster assignment from a conjugate multinomial to the non=conjugate Neal's algorithm 8 since the 
 inclusion of ksi produces a non-conjugate mixture.
 * added new option to gmrfdpgrow() to support count data response if user inputs non-NULL N x T offset matrix, E.
+
+06/23/2021
+----------
+* Update imports to remove package mvtnorm and use spam::rmvnorm.

@@ -4,10 +4,9 @@
 \name{cps}
 \alias{cps}
 \title{Monthly employment counts from 1990 - 2013 from the Current Population Survey}
-\format{A list object of 5 objects supporting a data matrix of N = 51 state time series for
-       T = 278 months.}
-\usage{
-cps
+\format{
+A list object of 5 objects supporting a data matrix of N = 51 state time series for
+       T = 278 months.
 }
 \description{
 Monthly employment counts published by the U.S. Bureau of Labor Statistics in the 

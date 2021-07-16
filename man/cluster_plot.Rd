@@ -4,11 +4,21 @@
 \alias{cluster_plot}
 \title{Plot estimated functions for experimental units faceted by cluster versus data to assess fit.}
 \usage{
-cluster_plot(object, N_clusters = NULL, time_points = NULL,
-  units_name = "unit", units_label = NULL, date_field = NULL,
-  x.axis.label = NULL, y.axis.label = NULL, smoother = TRUE,
-  sample_rate = 1, single_unit = FALSE, credible = FALSE,
-  num_plot = NULL)
+cluster_plot(
+  object,
+  N_clusters = NULL,
+  time_points = NULL,
+  units_name = "unit",
+  units_label = NULL,
+  date_field = NULL,
+  x.axis.label = NULL,
+  y.axis.label = NULL,
+  smoother = TRUE,
+  sample_rate = 1,
+  single_unit = FALSE,
+  credible = FALSE,
+  num_plot = NULL
+)
 }
 \arguments{
 \item{object}{A \code{gpdpgrow} or \code{gmrfdpgrow} object.}

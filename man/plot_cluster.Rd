@@ -4,8 +4,17 @@
 \alias{plot_cluster}
 \title{Plot estimated functions, facetted by cluster numbers, for a known clustering}
 \usage{
-plot_cluster(y, H, sort = FALSE, sample_rate = 0.05, y.axis.label = NULL,
-  smoother = TRUE, fade = 0.2, cluster_order = NULL, plot_render = TRUE)
+plot_cluster(
+  y,
+  H,
+  sort = FALSE,
+  sample_rate = 0.05,
+  y.axis.label = NULL,
+  smoother = TRUE,
+  fade = 0.2,
+  cluster_order = NULL,
+  plot_render = TRUE
+)
 }
 \arguments{
 \item{y}{An \code{N x T} matrix for a collection of functions.}

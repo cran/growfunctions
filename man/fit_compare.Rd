@@ -5,9 +5,16 @@
 \title{Side-by-side plot panels that compare latent function 
 values to data for different estimation models}
 \usage{
-fit_compare(objects, H = NULL, label.object = c("gp_rq", "gmrf_rw2"),
-  units_name = "Observation_Unit", units_label = NULL, date_field = NULL,
-  x.axis.label = NULL, y.axis.label = NULL)
+fit_compare(
+  objects,
+  H = NULL,
+  label.object = c("gp_rq", "gmrf_rw2"),
+  units_name = "Observation_Unit",
+  units_label = NULL,
+  date_field = NULL,
+  x.axis.label = NULL,
+  y.axis.label = NULL
+)
 }
 \arguments{
 \item{objects}{A list input where each element is a returned object

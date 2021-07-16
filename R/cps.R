@@ -27,7 +27,6 @@
 #' @docType data
 #' @keywords datasets
 #' @name cps
-#' @usage cps
 #' @format A list object of 5 objects supporting a data matrix of N = 51 state time series for
 #'        T = 278 months.
 NULL

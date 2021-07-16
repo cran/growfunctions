@@ -5,9 +5,29 @@
 \title{Run a Bayesian functional data model under a GP prior with a fixed clustering structure
 that co-samples latent functions, {bb_i}.}
 \usage{
-gpBFixPost(y, ipr, Omega_t, Omega_s, gp_mod, jitter, gp_shape, gp_rate,
-  noise_shape, noise_rate, lower, upper, w, n_slice_iter, y_index, n.iter,
-  n.burn, n.thin, n.tune, progress, s)
+gpBFixPost(
+  y,
+  ipr,
+  Omega_t,
+  Omega_s,
+  gp_mod,
+  jitter,
+  gp_shape,
+  gp_rate,
+  noise_shape,
+  noise_rate,
+  lower,
+  upper,
+  w,
+  n_slice_iter,
+  y_index,
+  n.iter,
+  n.burn,
+  n.thin,
+  n.tune,
+  progress,
+  s
+)
 }
 \arguments{
 \item{y}{An \emph{N x T} matrix of N observations of \emph{T x 1} functions. \code{y} may\

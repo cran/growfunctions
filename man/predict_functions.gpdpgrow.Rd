@@ -5,8 +5,14 @@
 \title{Use the model-estimated GP covariance parameters from gpdpgrow() to predict the GP function at
 future time points.  Inputs the \code{gpdpgrow} object of estimated parameters.}
 \usage{
-\method{predict_functions}{gpdpgrow}(object, J = 500, test_times,
-  time_points = NULL, sn_order = NULL, ...)
+\method{predict_functions}{gpdpgrow}(
+  object,
+  J = 500,
+  test_times,
+  time_points = NULL,
+  sn_order = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{Object of class \code{gpdpgrow} returned from model run of \code{gpdpgrow()}}

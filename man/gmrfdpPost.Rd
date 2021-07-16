@@ -5,9 +5,30 @@
 \title{Run a Bayesian functional data model under an instrinsic GMRF prior whose precision parameters
 employ a DP prior}
 \usage{
-gmrfdpPost(y, ksi, ipr, C, D, q_order, q_type, n.iter, n.burn, n.thin, M_init,
-  w_star, q_shape, q_rate, tau_shape, tau_rate, dp_shape, dp_rate, nu, progress,
-  jitter, kappa_fast)
+gmrfdpPost(
+  y,
+  ksi,
+  ipr,
+  C,
+  D,
+  q_order,
+  q_type,
+  n.iter,
+  n.burn,
+  n.thin,
+  M_init,
+  w_star,
+  q_shape,
+  q_rate,
+  tau_shape,
+  tau_rate,
+  dp_shape,
+  dp_rate,
+  nu,
+  progress,
+  jitter,
+  kappa_fast
+)
 }
 \arguments{
 \item{y}{An \emph{N x T} matrix of N observations of \emph{T x 1} functions}
