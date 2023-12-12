@@ -142,7 +142,7 @@ NULL
 #' @references
 #'     T. D. Savitsky (2014) Bayesian Non-Parametric Mixture Estimation for Time-Indexed Functional
 #'     Data for \code{R}. Submitted to: Journal of Statistical Software.     
-#' @import reshape2 ggplot2 Rcpp spam mvtnorm     
+#' @import reshape2 ggplot2 Rcpp spam     
 #' @export 
 gmrfdpgrow		<- function(y, ksi, E, ipr, q_order, q_type, q_shape, q_rate, 
                         tau_shape, tau_rate,
@@ -377,7 +377,7 @@ gmrfdpgrow.default		<- function(y, ksi = NULL, E = NULL, ipr = NULL,
 #'        \code{ipr = rep(1,nrow(y))} indicating an iid sample.
 #' @param C A list object of length, \code{K}, the number of iGMRF precision terms.
 #'          Each entry contains a \emph{T x T} normalized adjacency matrix.  The diagonal entries are
-#'          \code{0} and row \code{i} contains the weight for each entry {!=i} divided by the sum
+#'          \code{0} and row \code{i} contains the weight for each entry \code{!=i} divided by the sum
 #'          of the weights.
 #' @param D A \emph{K x T} matrix, where \code{K} denotes the number of iGMRF terms.
 #'          Row \code{k} contains the \code{T} elements of the diagonal of the term-\code{k}
@@ -488,7 +488,7 @@ gmrfdpPost = function (y, ksi, ipr, C, D, q_order, q_type,
 #'        \code{ipr = rep(1,nrow(y))} indicating an iid sample.
 #' @param C A list object of length, \code{K}, the number of iGMRF precision terms.
 #'          Each entry contains a \emph{T x T} normalized adjacency matrix.  The diagonal entries are
-#'          \code{0} and row \code{i} contains the weight for each entry {!=i} divided by the sum
+#'          \code{0} and row \code{i} contains the weight for each entry \code{!=i} divided by the sum
 #'          of the weights.
 #' @param D A \emph{K x T} matrix, where \code{K} denotes the number of iGMRF terms.
 #'          Row \code{k} contains the \code{T} elements of the diagonal of the term-\code{k}

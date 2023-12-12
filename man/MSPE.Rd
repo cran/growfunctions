@@ -11,7 +11,7 @@ MSPE(object, y_true, pos)
 
 \item{y_true}{An \code{N x T} numeric matrix of test set values.}
 
-\item{pos}{An \code{N x T} matrix with all entries either \code{0} or {1}, where a \code{1}
+\item{pos}{An \code{N x T} matrix with all entries either \code{0} or \code{1}, where a \code{1}
 indexes a missing entry or test point in \code{y_true}.}
 }
 \value{

@@ -32,7 +32,7 @@ time values at which "predicted" values were rendered for the functions.  This i
 only applies to \code{gpdpgrow} objects and not \code{gmrfdpgrow} objects because the latter 
 covariance structure is based on adjacency for equally-spaced time points.
 Defaults to \code{1:T_train} for the list entry pointed to "fitted" and 
-{(T_train+1):(T_train + T_test)} for the list entry pointed to "predicted".}
+\code{(T_train+1):(T_train + T_test)} for the list entry pointed to "predicted".}
 
 \item{date_label}{A vector of \code{Date} values for labeling the x-axis tick marks.
 Defaults to \code{1:T}  .}

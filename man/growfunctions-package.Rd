@@ -11,8 +11,8 @@ From an Observed Collection of Domain-Indexed Time-Series}
 \tabular{ll}{
 Package: \tab growfunctions\cr
 Type: \tab Package\cr
-Version: \tab 0.14\cr
-Date: \tab 2018-03-30\cr
+Version: \tab 0.16\cr
+Date: \tab 2023-12-08\cr
 License: \tab GPL (>= 3) \cr
 LazyLoad: \tab yes\cr
 }

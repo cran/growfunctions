@@ -3,7 +3,7 @@
 \name{gpBFixPost}
 \alias{gpBFixPost}
 \title{Run a Bayesian functional data model under a GP prior with a fixed clustering structure
-that co-samples latent functions, {bb_i}.}
+that co-samples latent functions, \code{bb_i}.}
 \usage{
 gpBFixPost(
   y,

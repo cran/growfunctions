@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_cluster.R
 \name{plot_cluster}
 \alias{plot_cluster}
-\title{Plot estimated functions, facetted by cluster numbers, for a known clustering}
+\title{Plot estimated functions, faceted by cluster numbers, for a known clustering}
 \usage{
 plot_cluster(
   y,

@@ -127,7 +127,7 @@ Defaults to \code{w = 1.5}.}
 \item{n.thin}{Gap between successive sampling iterations to save.}
 
 \item{n.tune}{Number of iterations (before ergodic chain instantiated) to adapt \code{w}, separately,
-for each covariance term, \code{p = 1,...,P}.  Sets each {w_p} to lie in the 90 percent credible 
+for each covariance term, \code{p = 1,...,P}.  Sets each \code{w_p} to lie in the 90 percent credible 
 interval computed from the tuning sample (that is divided into 5 blocks so that \code{w_p} is 
 successively updated in each block of runs).}
 

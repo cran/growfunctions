@@ -4,7 +4,7 @@
 #'
 #' @param object A \code{gpdpgrow} or \code{gmrfdpgrow} object. 
 #' @param y_true An \code{N x T} numeric matrix of test set values.
-#' @param pos An \code{N x T} matrix with all entries either \code{0} or {1}, where a \code{1}
+#' @param pos An \code{N x T} matrix with all entries either \code{0} or \code{1}, where a \code{1}
 #'        indexes a missing entry or test point in \code{y_true}.
 #' @return A list object containing various MSPE fit statistics that measure the accuracy of 
 #'         of predicting the values in \code{y_true} indexed by \code{pos}.

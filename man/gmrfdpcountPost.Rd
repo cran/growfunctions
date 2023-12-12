@@ -56,7 +56,7 @@ inference about the population requires adjustments to the observed sample.  Def
 
 \item{C}{A list object of length, \code{K}, the number of iGMRF precision terms.
 Each entry contains a \emph{T x T} normalized adjacency matrix.  The diagonal entries are
-\code{0} and row \code{i} contains the weight for each entry {!=i} divided by the sum
+\code{0} and row \code{i} contains the weight for each entry \code{!=i} divided by the sum
 of the weights.}
 
 \item{D}{A \emph{K x T} matrix, where \code{K} denotes the number of iGMRF terms.

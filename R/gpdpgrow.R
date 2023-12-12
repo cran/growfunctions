@@ -82,7 +82,7 @@ NULL
 #'   \code{gpdpgrow} will return \code{(n.iter - n.burn)} posterior samples.
 #' @param n.thin Gap between successive sampling iterations to save.
 #' @param n.tune Number of iterations (before ergodic chain instantiated) to adapt \code{w}, separately,
-#'   for each covariance term, \code{p = 1,...,P}.  Sets each {w_p} to lie in the 90 percent credible 
+#'   for each covariance term, \code{p = 1,...,P}.  Sets each \code{w_p} to lie in the 90 percent credible 
 #'   interval computed from the tuning sample (that is divided into 5 blocks so that \code{w_p} is 
 #'   successively updated in each block of runs).
 #' @param progress A boolean value denoting whether to display a progress bar during model execution.
@@ -785,7 +785,7 @@ gpdpbPost = function (y, ipr, Omega_t, Omega_s, gp_mod, jitter, b_move, gp_shape
 ## fixed / input clustering - user sets cluster structure - not estimated
 #####################################################
 #' Run a Bayesian functional data model under a GP prior with a fixed clustering structure
-#' that co-samples latent functions, {bb_i}.
+#' that co-samples latent functions, \code{bb_i}.
 #'
 #' An internal function to \code{\link{gpdpgrow}}
 #'

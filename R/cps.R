@@ -3,7 +3,7 @@
 #' Monthly employment counts published by the U.S. Bureau of Labor Statistics in the 
 #' Current Population Survey (CPS) for each of \code{N = 51} states (including the District
 #' of Columbia).  This dataset covers \code{T = 278} months from \emph{1990} the first two
-#' months of \emph{2013}.  The data include a {N x T} matrix, \code{y_raw}, of raw employment counts, 
+#' months of \emph{2013}.  The data include a \code{N x T} matrix, \code{y_raw}, of raw employment counts, 
 #' as well as set of standardized values, \code{y}, where the standardization is done within state.  
 #' The standardized data matrix is used in our \code{\link{gpdpgrow}} and \code{\link{gmrfdpgrow}}
 #' estimating functions because the standardization facilitates comparisons of the time-series across
@@ -17,7 +17,7 @@
 #'         states.
 #'   \item st. Two-digit labels for each of the \code{N} states in the order presented in 
 #'         \code{y} and \code{y_raw}.
-#'   \item dte. A \code{Date} vector of length {T} that presents the set of dates (in \code{y-m-d} 
+#'   \item dte. A \code{Date} vector of length \code{T} that presents the set of dates (in \code{y-m-d} 
 #'         format) associated to the \code{T} time points presented in \code{y} and \code{y_raw}.
 #'   \item yr. A number vector listing sequence of years, \emph{1990 - 2013} included in the data set.
 #'   \item yr_label. A numerical vector of length \code{T = 278} with year labels for each 

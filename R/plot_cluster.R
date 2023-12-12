@@ -1,4 +1,4 @@
-#' Plot estimated functions, facetted by cluster numbers, for a known clustering
+#' Plot estimated functions, faceted by cluster numbers, for a known clustering
 #'
 #' An internal function of the \code{growfunctions} package.
 #'

@@ -131,8 +131,8 @@ SEXP auxclusterstep_gmrf(const cube& B, const mat& ksi, mat& kappa_star, const u
       /* memo: no observations, yet */
       /* adding entries for aux vars and set to 0 */
       /* by default, new rows/cols/slices set to 0 */
-      num.insert_rows(M,auxSize,true);
-      Num.insert_rows(M,auxSize,true); /* population uplifted */
+      num.insert_rows(M,auxSize);
+      Num.insert_rows(M,auxSize); /* population uplifted */
       /* inserts 0 for M -> h-l positions */
       weights_i			     = Num / (double(N)- (1/ipr(i)) +conc); 
       weights_i.subvec(M,(h-1))	= 

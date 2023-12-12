@@ -1011,8 +1011,8 @@ SEXP auxclusterstep(mat& theta_star, mat& wpm, cube& U_last, const mat& Omega_t,
                     /* memo: no observations, yet */
                     /* adding entries for aux vars and set to 0 */
                     /* by default, new rows/cols/slices set to 0 */
-		                num.insert_rows(M,auxSize,true);
-                    Num.insert_rows(M,auxSize,true); /* population uplifted */
+		                num.insert_rows(M,auxSize);
+                    Num.insert_rows(M,auxSize); /* population uplifted */
                     /* inserts 0 for M -> h-l positions */
 	     	      weights			     = Num / (double(N)- (1/ipr(i)) +conc); 
 		          weights.subvec(M,(h-1))	= ( (conc/w_star) / (double(N) - (1/ipr(i)) + conc) )*ones(auxSize);
